@@ -1,0 +1,16 @@
+/build/
+/out/
+/bin/
+/lib/
+/obj/
+/CMakeFiles/
+/CMakeCache.txt
+/cmake_install.cmake
+
+Makefile
+CMakeLists.txt.user
+
+*.log
+*.swp
+*.swo
+*.bak
