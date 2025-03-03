@@ -1,6 +1,8 @@
 #ifndef REGISTERS
 #define REGISTERS
 
+#define ZERO_FLAG (1 << 7)
+
 struct registers {
   union {
     struct {
