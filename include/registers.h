@@ -10,6 +10,8 @@
 #define SET_FLAG(x) (registers.f |= (x))
 #define CLEAR_FLAG(x) (registers.f &= ~(x))
 
+#include <stdint.h>
+
 struct registers {
   union {
     struct {
@@ -41,6 +43,6 @@ struct registers {
   };
   uint16_t sp;
   uint16_t pc;
-}
+} extern registers;
 
-#endif // !REGISTERS
+#endif // REGISTERS
