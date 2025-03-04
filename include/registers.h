@@ -39,8 +39,8 @@ struct registers {
     };
     uint16_t hl;  
   };
-  uint8_t sp;
-  uint8_t pc;
+  uint16_t sp;
+  uint16_t pc;
 }
 
 #endif // !REGISTERS
