@@ -1,5 +1,5 @@
-#ifndef CPU
-#define CPU
+#ifndef CPU_H
+#define CPU_H
 
 // 8-bit arithmetic
 void add(const uint8_t value);
@@ -11,4 +11,4 @@ void xor(const uint8_t value);
 void or(const uint8_t value);
 void cp(const uint8_t value);
 
-#endif // CPU
+#endif // CPU_H
