@@ -1,14 +1,5 @@
-#ifndef REGISTERS
-#define REGISTERS
-
-#define ZERO_FLAG (1 << 7)
-#define NEGATIVE_FLAG (1 << 6)
-#define HALFCARRY_FLAG (2 << 5)
-#define CARRY_FLAG (1 << 4)
-
-#define ISSET_FLAG(x) ((registers.f & (x)) ? 1 : 0)
-#define SET_FLAG(x) (registers.f |= (x))
-#define CLEAR_FLAG(x) (registers.f &= ~(x))
+#ifndef REGISTERS_H
+#define REGISTERS_H
 
 #include <stdint.h>
 
@@ -45,4 +36,4 @@ struct registers {
   uint16_t pc;
 } extern registers;
 
-#endif // REGISTERS
+#endif // REGISTERS_H

@@ -1,8 +1,7 @@
 #include "registers.h"
+#include "flags.h"
 
 #include "cpu.h"
-
-#include <stdint.h>
 
 // 8-bit arithmetic
 void add(const uint8_t value) {

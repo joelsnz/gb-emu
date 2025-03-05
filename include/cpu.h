@@ -1,6 +1,8 @@
 #ifndef CPU_H
 #define CPU_H
 
+#include <stdint.h>
+
 // 8-bit arithmetic
 void add(const uint8_t value);
 void adc(const uint8_t value);
