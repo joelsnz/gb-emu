@@ -20,7 +20,7 @@ void addhl(const uint16_t value);
 void addsp(const int8_t value);
 
 // miscellaneous
-void swap(const uint8_t *reg);
+void swap(uint8_t *reg);
 void daa(void);
 void cpl(void);
 void ccf(void);
