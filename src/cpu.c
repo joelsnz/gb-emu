@@ -242,11 +242,31 @@ void nop(void) {;}
 
 // rotates & shifts
 void rlca(void) {
+	uint_8 result = registers.a << 1;
 
+	CLEAR_FLAG(ZERO_FLAG | NEGATIVE_FLAG | HALFCARRY_FLAG);
+
+	if(registers.a & 0x80) {
+		SET_FLAG(CARRY_FLAG);
+		result++;
+	} else {
+		CLEAR_FLAG(CARRY_FLAG);
+	}
+	
+	registers.a = result;
 }
 
 void rla(void) {
+	uint_8 result = registers.a << 1;
 
+	result += ISSET_FLAG(CARRY_FLAG);
+
+	CLEAR_FLAG(ZERO_FLAG | NEGATIVE_FLAG | HALFCARRY_FLAG);
+
+	if(registers.a & 0x80) SET_FLAG(CARRY_FLAG);
+	else CLEAR_FLAG(CARRY_FLAG);
+	
+	registers.a = result;
 }
 
 void rrca(void) {
