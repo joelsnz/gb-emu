@@ -270,51 +270,154 @@ void rla(void) {
 }
 
 void rrca(void) {
+	uint_8 result = registers.a >> 1;
 
+	CLEAR_FLAG(ZERO_FLAG | NEGATIVE_FLAG | HALFCARRY_FLAG);
+
+	if(registers.a & 0x01) {
+		SET_FLAG(CARRY_FLAG);
+		result |= 0x80;
+	} else {
+		CLEAR_FLAG(CARRY_FLAG);
+	}
+	
+	registers.a = result;
 }
 
 void rra(void) {
+	uint_8 result = registers.a >> 1;
 
+	result += ISSET_FLAG(CARRY_FLAG) ? 0x80 : 0x00;
+
+	CLEAR_FLAG(ZERO_FLAG | NEGATIVE_FLAG | HALFCARRY_FLAG);
+
+	if(registers.a & 0x01) SET_FLAG(CARRY_FLAG);
+	else CLEAR_FLAG(CARRY_FLAG);
+	
+	registers.a = result;
 }
 
 void rlc(const uint8_t *reg) {
+	uint_8 result = *reg << 1;
 
+	CLEAR_FLAG(NEGATIVE_FLAG | HALFCARRY_FLAG);
+
+	if(*reg & 0x80) {
+		SET_FLAG(CARRY_FLAG);
+		result++;
+	} else {
+		CLEAR_FLAG(CARRY_FLAG);
+	}
+
+  if(result) CLEAR_FLAG(ZERO_FLAG);
+  else SET_FLAG(ZERO_FLAG);
+	
+	*reg = result;
 }
 
 void rl(const uint8_t *reg) {
+	uint_8 result = *reg << 1;
 
+	result += ISSET_FLAG(CARRY_FLAG);
+
+	CLEAR_FLAG(NEGATIVE_FLAG | HALFCARRY_FLAG);
+
+	if(*reg & 0x80) SET_FLAG(CARRY_FLAG);
+	else CLEAR_FLAG(CARRY_FLAG);
+
+  if(result) CLEAR_FLAG(ZERO_FLAG);
+  else SET_FLAG(ZERO_FLAG);
+	
+	*reg = result;
 }
 
 void rrc(const uint8_t *reg) {
+	uint_8 result = *reg >> 1;
 
+	CLEAR_FLAG(NEGATIVE_FLAG | HALFCARRY_FLAG);
+
+	if(*reg & 0x01) {
+		SET_FLAG(CARRY_FLAG);
+		result |= 0x80;
+	} else {
+		CLEAR_FLAG(CARRY_FLAG);
+	}
+
+  if(result) CLEAR_FLAG(ZERO_FLAG);
+  else SET_FLAG(ZERO_FLAG);
+	
+	*reg = result;
 }
 
 void rr(const uint8_t *reg) {
+	uint_8 result = *reg >> 1;
 
+	result += ISSET_FLAG(CARRY_FLAG) ? 0x80 : 0x00;
+
+	CLEAR_FLAG(NEGATIVE_FLAG | HALFCARRY_FLAG);
+
+	if(*reg & 0x01) SET_FLAG(CARRY_FLAG);
+	else CLEAR_FLAG(CARRY_FLAG);
+
+  if(result) CLEAR_FLAG(ZERO_FLAG);
+  else SET_FLAG(ZERO_FLAG);
+	
+	*reg = result;
 }
 
 void sla(const uint8_t *reg) {
+  uint8_t result = *reg << 1;
 
+  if(result) CLEAR_FLAG(ZERO_FLAG);
+  else SET_FLAG(ZERO_FLAG);
+  
+	CLEAR_FLAG(NEGATIVE_FLAG | HALFCARRY_FLAG);
+
+  if(*reg & 0x80) SET_FLAG(CARRY_FLAG);
+  else CLEAR_FLAG(CARRY_FLAG);
+
+  *reg = result;
 }
 
 void sra(const uint8_t *reg) {
+  uint8_t result = (*reg >> 1) |= (*reg & 0x80);
 
+  if(result) CLEAR_FLAG(ZERO_FLAG);
+  else SET_FLAG(ZERO_FLAG);
+  
+	CLEAR_FLAG(NEGATIVE_FLAG | HALFCARRY_FLAG);
+
+  if(*reg & 0x01) SET_FLAG(CARRY_FLAG);
+  else CLEAR_FLAG(CARRY_FLAG);
+
+  *reg = result;
 }
 
 void srl(const uint8_t *reg) {
+  uint8_t result = *reg >> 1;
 
+  if(result) CLEAR_FLAG(ZERO_FLAG);
+  else SET_FLAG(ZERO_FLAG);
+  
+	CLEAR_FLAG(NEGATIVE_FLAG | HALFCARRY_FLAG);
+
+  if(*reg & 0x01) SET_FLAG(CARRY_FLAG);
+  else CLEAR_FLAG(CARRY_FLAG);
+
+  *reg = result;
 }
 
 
 // bit opcodes
 void bit(uint8_t index, uint8_t *reg) {
-
+  if(*reg & 1 << index) CLEAR_FLAG(ZERO_FLAG);
+  else SET_FLAG(ZERO_FLAG);
 }
 
 void set(uint8_t index, uint8_t *reg) {
-
+  *reg |= 1 << index;
 }
 
 void res(uint8_t index, uint8_t *reg) {
-
+  *reg &= ~(1 << index);
 }
