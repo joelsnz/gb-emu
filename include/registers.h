@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-struct registers {
+struct registers{
   union {
     struct {
       uint8_t a;

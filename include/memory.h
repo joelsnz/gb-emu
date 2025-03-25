@@ -3,6 +3,6 @@
 
 #include <stdint.h>
 
-extern uint8_t *memory = malloc(sizeof(uint8_t) * 0xFFFF);
+extern uint8_t memory[0x10000];
 
 #endif // MEMORY_H

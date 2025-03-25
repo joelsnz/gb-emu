@@ -1,5 +1,5 @@
-#ifndef CPU_H
-#define CPU_H
+#ifndef INSTRUCTIONS_H
+#define INSTRUCTIONS_H
 
 #include <stdint.h>
 
@@ -49,4 +49,4 @@ void bit(uint8_t index, uint8_t *reg);
 void set(uint8_t index, uint8_t *reg);
 void res(uint8_t index, uint8_t *reg);
 
-#endif // CPU_H
+#endif // INSTRUCTIONS_H

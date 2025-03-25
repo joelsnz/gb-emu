@@ -1,7 +1,8 @@
 #include "registers.h"
+#include "memory.h"
 #include "flags.h"
 
-#include "cpu.h"
+#include "instructions.h"
 
 // 8-bit ALU
 void add(const uint8_t value) {

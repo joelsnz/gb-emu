@@ -5,10 +5,11 @@ set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_STANDARD_REQUIRED True)
 
 set(SOURCES
-    src/main.c
-    src/cpu.c
-    src/flags.c
-    src/registers.c
+  src/main.c
+  src/instructions.c
+  src/flags.c
+  src/registers.c
+  src/memory.c
 )
 
 add_executable(${PROJECT_NAME} ${SOURCES})
