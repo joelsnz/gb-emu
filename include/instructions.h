@@ -36,13 +36,13 @@ void rlca(void);
 void rla(void);
 void rrca(void);
 void rra(void);
-void rlc(const uint8_t *reg);
-void rl(const uint8_t *reg);
-void rrc(const uint8_t *reg);
-void rr(const uint8_t *reg);
-void sla(const uint8_t *reg);
-void sra(const uint8_t *reg);
-void srl(const uint8_t *reg);
+void rlc(uint8_t *reg);
+void rl(uint8_t *reg);
+void rrc(uint8_t *reg);
+void rr(uint8_t *reg);
+void sla(uint8_t *reg);
+void sra(uint8_t *reg);
+void srl(uint8_t *reg);
 
 // bit opcodes
 void bit(uint8_t index, uint8_t *reg);

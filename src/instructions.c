@@ -243,7 +243,7 @@ void nop(void) {;}
 
 // rotates & shifts
 void rlca(void) {
-	uint_8 result = registers.a << 1;
+	uint8_t result = registers.a << 1;
 
 	CLEAR_FLAG(ZERO_FLAG | NEGATIVE_FLAG | HALFCARRY_FLAG);
 
@@ -258,7 +258,7 @@ void rlca(void) {
 }
 
 void rla(void) {
-	uint_8 result = registers.a << 1;
+	uint8_t result = registers.a << 1;
 
 	result += ISSET_FLAG(CARRY_FLAG);
 
@@ -271,7 +271,7 @@ void rla(void) {
 }
 
 void rrca(void) {
-	uint_8 result = registers.a >> 1;
+	uint8_t result = registers.a >> 1;
 
 	CLEAR_FLAG(ZERO_FLAG | NEGATIVE_FLAG | HALFCARRY_FLAG);
 
@@ -286,7 +286,7 @@ void rrca(void) {
 }
 
 void rra(void) {
-	uint_8 result = registers.a >> 1;
+	uint8_t result = registers.a >> 1;
 
 	result += ISSET_FLAG(CARRY_FLAG) ? 0x80 : 0x00;
 
@@ -298,8 +298,8 @@ void rra(void) {
 	registers.a = result;
 }
 
-void rlc(const uint8_t *reg) {
-	uint_8 result = *reg << 1;
+void rlc(uint8_t *reg) {
+	uint8_t result = *reg << 1;
 
 	CLEAR_FLAG(NEGATIVE_FLAG | HALFCARRY_FLAG);
 
@@ -316,8 +316,8 @@ void rlc(const uint8_t *reg) {
 	*reg = result;
 }
 
-void rl(const uint8_t *reg) {
-	uint_8 result = *reg << 1;
+void rl(uint8_t *reg) {
+	uint8_t result = *reg << 1;
 
 	result += ISSET_FLAG(CARRY_FLAG);
 
@@ -332,8 +332,8 @@ void rl(const uint8_t *reg) {
 	*reg = result;
 }
 
-void rrc(const uint8_t *reg) {
-	uint_8 result = *reg >> 1;
+void rrc(uint8_t *reg) {
+	uint8_t result = *reg >> 1;
 
 	CLEAR_FLAG(NEGATIVE_FLAG | HALFCARRY_FLAG);
 
@@ -350,8 +350,8 @@ void rrc(const uint8_t *reg) {
 	*reg = result;
 }
 
-void rr(const uint8_t *reg) {
-	uint_8 result = *reg >> 1;
+void rr(uint8_t *reg) {
+	uint8_t result = *reg >> 1;
 
 	result += ISSET_FLAG(CARRY_FLAG) ? 0x80 : 0x00;
 
@@ -366,7 +366,7 @@ void rr(const uint8_t *reg) {
 	*reg = result;
 }
 
-void sla(const uint8_t *reg) {
+void sla(uint8_t *reg) {
   uint8_t result = *reg << 1;
 
   if(result) CLEAR_FLAG(ZERO_FLAG);
@@ -380,8 +380,8 @@ void sla(const uint8_t *reg) {
   *reg = result;
 }
 
-void sra(const uint8_t *reg) {
-  uint8_t result = (*reg >> 1) |= (*reg & 0x80);
+void sra(uint8_t *reg) {
+  uint8_t result = (*reg >> 1) | (*reg & 0x80);
 
   if(result) CLEAR_FLAG(ZERO_FLAG);
   else SET_FLAG(ZERO_FLAG);
@@ -394,7 +394,7 @@ void sra(const uint8_t *reg) {
   *reg = result;
 }
 
-void srl(const uint8_t *reg) {
+void srl(uint8_t *reg) {
   uint8_t result = *reg >> 1;
 
   if(result) CLEAR_FLAG(ZERO_FLAG);
@@ -407,7 +407,6 @@ void srl(const uint8_t *reg) {
 
   *reg = result;
 }
-
 
 // bit opcodes
 void bit(uint8_t index, uint8_t *reg) {
