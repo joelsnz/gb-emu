@@ -10,6 +10,7 @@ set(SOURCES
   src/flags.c
   src/registers.c
   src/memory.c
+  src/cpu.c
 )
 
 add_executable(${PROJECT_NAME} ${SOURCES})
