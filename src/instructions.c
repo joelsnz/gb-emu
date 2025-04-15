@@ -191,6 +191,14 @@ void addsp(const int8_t value) {
   registers.sp = result;
 }
 
+void inc16(const uint16_t *reg) {
+  *reg++;
+}
+
+void dec16(const uint16_t *reg) {
+  *reg--;
+}
+
 // miscellaneous
 void swap(uint8_t *reg) {
   uint8_t result = (*reg << 4) | (*reg >> 4);

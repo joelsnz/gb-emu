@@ -18,6 +18,8 @@ void dec(const uint8_t *reg);
 // 16-bit arithmetic
 void addhl(const uint16_t value);
 void addsp(const int8_t value);
+void inc16(const uint16_t *reg);
+void dec16(const uint16_t *reg);
 
 // miscellaneous
 void swap(uint8_t *reg);

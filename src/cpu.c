@@ -31,6 +31,23 @@ int prefix_execute(const uint8_t opcode) {
 int execute(const uint8_t opcode) {
 	switch(opcode) {
 		case 0x00: nop(); break;
+		case 0x04: inc(&registers.b); break;
+		case 0x05: dec(&registers.b); break;
+		case 0x0c: inc(&registers.c); break;
+		case 0x0d: dec(&registers.c); break;
+		case 0x14: inc(&registers.d); break;
+		case 0x15: dec(&registers.d); break;
+		case 0x1c: inc(&registers.e); break;
+		case 0x1d: dec(&registers.e); break;
+		case 0x24: inc(&registers.h); break;
+		case 0x25: dec(&registers.h); break;
+		case 0x2c: inc(&registers.l); break;
+		case 0x2d: dec(&registers.l); break;
+		case 0x34: inc(&memory[registers.hl]); break;
+		case 0x35: dec(&memory[registers.hl]); break;
+    case 0x3c: inc(&registers.a); break;
+    case 0x3d: dec(&registers.a); break;
+
 		case 0x80: add(registers.b); break;
 		case 0x81: add(registers.c); break;
 		case 0x82: add(registers.d); break;
@@ -47,6 +64,7 @@ int execute(const uint8_t opcode) {
 		case 0x8d: adc(registers.l); break;
 		case 0x8e: adc(memory[registers.hl]); break;
 		case 0x8f: adc(registers.a); break;
+
 		case 0x90: sub(registers.b); break;
 		case 0x91: sub(registers.c); break;
 		case 0x92: sub(registers.d); break;
@@ -63,6 +81,7 @@ int execute(const uint8_t opcode) {
 		case 0x9d: sbc(registers.l); break;
 		case 0x9e: sbc(memory[registers.hl]); break;
 		case 0x9f: sbc(registers.a); break;
+
 		case 0xa0: and(registers.b); break;
 		case 0xa1: and(registers.c); break;
 		case 0xa2: and(registers.d); break;
@@ -79,6 +98,7 @@ int execute(const uint8_t opcode) {
 		case 0xad: xor(registers.l); break;
 		case 0xae: xor(memory[registers.hl]); break;
 		case 0xaf: xor(registers.a); break;
+
 		case 0xb0: or(registers.b); break;
 		case 0xb1: or(registers.c); break;
 		case 0xb2: or(registers.d); break;
@@ -95,6 +115,18 @@ int execute(const uint8_t opcode) {
 		case 0xbd: cp(registers.l); break;
 		case 0xbe: cp(memory[registers.hl]); break;
 		case 0xbf: cp(registers.a); break;
+
+    case 0xc6: add(memory[++registers.pc]); break;
+    case 0xce: adc(memory[++registers.pc]); break;
+
+    case 0xd6: sub(memory[++registers.pc]); break;
+    case 0xde: sbc(memory[++registers.pc]); break;
+
+    case 0xe6: and(memory[++registers.pc]); break;
+    case 0xee: xor(memory[++registers.pc]); break;
+
+    case 0xf6: or(memory[++registers.pc]); break;
+    case 0xfe: cp(memory[++registers.pc]); break;
 		default: return registers.pc;
 	}
 	return registers.pc++;
