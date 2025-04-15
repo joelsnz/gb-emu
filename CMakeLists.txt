@@ -11,6 +11,10 @@ set(SOURCES
   src/registers.c
   src/memory.c
   src/cpu.c
+  src/arithmetic.c
+  src/miscellaneous.c
+  src/shifts.c
+  src/bit.c
 )
 
 add_executable(${PROJECT_NAME} ${SOURCES})
