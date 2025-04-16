@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-struct registers{
+typedef struct {
   union {
     struct {
       uint8_t a;
@@ -34,6 +34,8 @@ struct registers{
   };
   uint16_t sp;
   uint16_t pc;
-} extern registers;
+} registers_t;
+
+void init_r8(registers_t *r, uint8_t **table);
 
 #endif // REGISTERS_H

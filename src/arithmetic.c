@@ -1,12 +1,12 @@
-#include "registers.h"
-#include "memory.h"
+#include "cpu.h"
 #include "flags.h"
 
 #include "arithmetic.h"
 
 // 8-bit ALU
-void add(const uint8_t value) {
-  const uint16_t result = registers.a + value;
+void add(cpu_t *cpu) {
+  uint8_t value = cpu->r8[cpu->memory[cpu->registers.pc & 0x07]];
+  const uint16_t result = cpu->registers.a + value;
 
   if(result) CLEAR_FLAG(ZERO_FLAG);
   else SET_FLAG(ZERO_FLAG);
@@ -14,16 +14,16 @@ void add(const uint8_t value) {
   CLEAR_FLAG(NEGATIVE_FLAG);
 
   const uint8_t half_carry =
-    (registers.a & 0x0F) + (value & 0x0F) > 0x0F;
+    (cpu->registers.a & 0x0F) + (value & 0x0F) > 0x0F;
   if(half_carry) SET_FLAG(HALFCARRY_FLAG);
   else CLEAR_FLAG(HALFCARRY_FLAG);
 
   if(result > UINT8_MAX) SET_FLAG(CARRY_FLAG);
   else CLEAR_FLAG(CARRY_FLAG);
 
-  registers.a = (uint8_t) result;
+  cpu->registers.a = (uint8_t) result;
 }
-
+/*
 void adc(const uint8_t value) {
   const uint16_t result =
     registers.a + value + ISSET_FLAG(CARRY_FLAG);
@@ -197,4 +197,4 @@ void inc16(const uint16_t *reg) {
 
 void dec16(const uint16_t *reg) {
   *reg--;
-}
+}*/

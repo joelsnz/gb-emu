@@ -1,11 +1,5 @@
 #include "cpu.h"
 
-#include <stdio.h>
-
-#include "instructions.h"
-#include "memory.h"
-#include "registers.h"
-
-void step() {
-
+void init_cpu(cpu_t *cpu) {
+	init_r8(&cpu->registers, &cpu->r8);
 }
