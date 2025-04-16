@@ -1,20 +1,23 @@
-#include <cpu.h>
-#include <memory.h>
-#include <registers.h>
+#include <arithmetic.h>
+
+#include "cpu.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 int main(void) {
-  memory[0] = 0xCB;
-  memory[1] = 0x00;
-  registers.pc = 0x0;
-  registers.a = 0x03;
-  registers.b = 0x04;
+  cpu_t *cpu = malloc(sizeof(cpu_t));
+  init_cpu(cpu);
+  cpu->memory[0] = 0x80;
+  cpu->memory[1] = 0x00;
+  cpu->registers.pc = 0x0;
+  cpu->registers.a = 0x03;
+  cpu->registers.b = 0x04;
 
-  printf("a: %d\tb: %d\tpc: %d\n", registers.a, registers.b, registers.pc);
+  printf("a: %d\tb: %d\tpc: %d\n", cpu->registers.a, cpu->registers.b, cpu->registers.pc);
 
-  step();
+  add(cpu);
 
-  printf("a: %d\tb: %d\tpc: %d\n", registers.a, registers.b, registers.pc);
+  printf("a: %d\tb: %d\tpc: %d\n", cpu->registers.a, cpu->registers.b, cpu->registers.pc);
 
   return 0;
 }

@@ -9,6 +9,13 @@ void init_r8(registers_t *r, uint8_t **table) {
 	table[3] = &r->e;
 	table[4] = &r->h;
 	table[5] = &r->l;
-	table[6]= NULL;
+	table[6] = NULL;
 	table[7] = &r->a;
+}
+
+void init_r16(registers_t *r, uint16_t **table) {
+	table[0] = &r->bc;
+	table[1] = &r->de;
+	table[2] = &r->hl;
+	table[3] = &r->sp;
 }

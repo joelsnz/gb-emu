@@ -3,22 +3,26 @@
 
 #include <stdint.h>
 
+#include "cpu.h"
+
+uint8_t get_value8(const cpu_t *cpu);
+
 // 8-bit arithmetic
-void add(const uint8_t value);
-void adc(const uint8_t value);
-void sub(const uint8_t value);
-void sbc(const uint8_t value);
-void and(const uint8_t value);
-void or(const uint8_t value);
-void xor(const uint8_t value);
-void cp(const uint8_t value);
-void inc(const uint8_t *reg);
-void dec(const uint8_t *reg);
+void add(cpu_t *cpu);
+void adc(cpu_t *cpu);
+void sub(cpu_t *cpu);
+void sbc(cpu_t *cpu);
+void and(cpu_t *cpu);
+void or(cpu_t *cpu);
+void xor(cpu_t *cpu);
+void cp(cpu_t *cpu);
+void inc(cpu_t *cpu);
+void dec(cpu_t *cpu);
 
 // 16-bit arithmetic
-void addhl(const uint16_t value);
-void addsp(const int8_t value);
-void inc16(const uint16_t *reg);
-void dec16(const uint16_t *reg);
+void addhl(cpu_t *cpu);
+void addsp(cpu_t *cpu);
+void inc16(cpu_t *cpu);
+void dec16(cpu_t *cpu);
 
 #endif //ARITHMETIC_H

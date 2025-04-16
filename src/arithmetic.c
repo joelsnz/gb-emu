@@ -1,166 +1,202 @@
-#include "cpu.h"
 #include "flags.h"
 
 #include "arithmetic.h"
 
+uint8_t get_value8(const cpu_t *cpu) {
+  const uint8_t reg = cpu->opcode & 0x07;
+
+  if (cpu->opcode & 0x40) // imm8 value
+    return cpu->memory[cpu->registers.pc + 1];
+
+  return reg == 0x06 // r8 value
+    ? cpu->memory[cpu->registers.hl]
+    : *cpu->r8[reg];
+}
+
 // 8-bit ALU
 void add(cpu_t *cpu) {
-  uint8_t value = cpu->r8[cpu->memory[cpu->registers.pc & 0x07]];
+  uint8_t value = get_value8(cpu);
+
   const uint16_t result = cpu->registers.a + value;
 
-  if(result) CLEAR_FLAG(ZERO_FLAG);
-  else SET_FLAG(ZERO_FLAG);
+  if(result) CLEAR_FLAG(cpu, ZERO_FLAG);
+  else SET_FLAG(cpu, ZERO_FLAG);
 
-  CLEAR_FLAG(NEGATIVE_FLAG);
+  CLEAR_FLAG(cpu, NEGATIVE_FLAG);
 
   const uint8_t half_carry =
     (cpu->registers.a & 0x0F) + (value & 0x0F) > 0x0F;
-  if(half_carry) SET_FLAG(HALFCARRY_FLAG);
-  else CLEAR_FLAG(HALFCARRY_FLAG);
+  if(half_carry) SET_FLAG(cpu, HALFCARRY_FLAG);
+  else CLEAR_FLAG(cpu, HALFCARRY_FLAG);
 
-  if(result > UINT8_MAX) SET_FLAG(CARRY_FLAG);
-  else CLEAR_FLAG(CARRY_FLAG);
+  if(result > UINT8_MAX) SET_FLAG(cpu, CARRY_FLAG);
+  else CLEAR_FLAG(cpu, CARRY_FLAG);
 
   cpu->registers.a = (uint8_t) result;
 }
-/*
-void adc(const uint8_t value) {
+
+void adc(cpu_t *cpu) {
+  uint8_t value = get_value8(cpu);
+
   const uint16_t result =
-    registers.a + value + ISSET_FLAG(CARRY_FLAG);
+    cpu->registers.a + value + ISSET_FLAG(cpu, CARRY_FLAG);
 
-  if(result) CLEAR_FLAG(ZERO_FLAG);
-  else SET_FLAG(ZERO_FLAG);
+  if(result) CLEAR_FLAG(cpu, ZERO_FLAG);
+  else SET_FLAG(cpu, ZERO_FLAG);
 
-  CLEAR_FLAG(NEGATIVE_FLAG);
+  CLEAR_FLAG(cpu, NEGATIVE_FLAG);
+
+  const uint8_t half_carry = (cpu->registers.a & 0x0F)
+    + (value & 0x0F) + ISSET_FLAG(cpu, CARRY_FLAG) > 0x0F;
+  if(half_carry) SET_FLAG(cpu, HALFCARRY_FLAG);
+  else CLEAR_FLAG(cpu, HALFCARRY_FLAG);
+
+  if(result > UINT8_MAX) SET_FLAG(cpu, CARRY_FLAG);
+  else CLEAR_FLAG(cpu, CARRY_FLAG);
+
+  cpu->registers.a = (uint8_t) result;
+}
+
+void sub(cpu_t *cpu) {
+  uint8_t value = get_value8(cpu);
+
+  const uint16_t result = cpu->registers.a - value;
+
+  if(result) CLEAR_FLAG(cpu, ZERO_FLAG);
+  else SET_FLAG(cpu, ZERO_FLAG);
+
+  SET_FLAG(cpu, NEGATIVE_FLAG);
 
   const uint8_t half_carry =
-    (registers.a & 0x0F) + (value & 0x0F) + ISSET_FLAG(CARRY_FLAG) > 0x0F;
-  if(half_carry) SET_FLAG(HALFCARRY_FLAG);
-  else CLEAR_FLAG(HALFCARRY_FLAG);
+    (cpu->registers.a & 0x0F) - (value & 0x0F) > 0x0F;
+  if(half_carry) SET_FLAG(cpu, HALFCARRY_FLAG);
+  else CLEAR_FLAG(cpu, HALFCARRY_FLAG);
 
-  if(result > UINT8_MAX) SET_FLAG(CARRY_FLAG);
-  else CLEAR_FLAG(CARRY_FLAG);
+  if(result > UINT8_MAX) SET_FLAG(cpu, CARRY_FLAG);
+  else CLEAR_FLAG(cpu, CARRY_FLAG);
 
-  registers.a = (uint8_t) result;
+  cpu->registers.a = (uint8_t) result;
 }
 
-void sub(const uint8_t value) {
-  const uint16_t result = registers.a - value;
+void sbc(cpu_t *cpu) {
+  uint8_t value = get_value8(cpu);
 
-  if(result) CLEAR_FLAG(ZERO_FLAG);
-  else SET_FLAG(ZERO_FLAG);
+  const uint16_t result =
+    cpu->registers.a - value - ISSET_FLAG(cpu, CARRY_FLAG);
 
-  SET_FLAG(NEGATIVE_FLAG);
+  if(result) CLEAR_FLAG(cpu, ZERO_FLAG);
+  else SET_FLAG(cpu, ZERO_FLAG);
 
-  const uint8_t half_carry = (registers.a & 0x0F) - (value & 0x0F) > 0x0F;
-  if(half_carry) SET_FLAG(HALFCARRY_FLAG);
-  else CLEAR_FLAG(HALFCARRY_FLAG);
+  SET_FLAG(cpu, NEGATIVE_FLAG);
 
-  if(result > UINT8_MAX) SET_FLAG(CARRY_FLAG);
-  else CLEAR_FLAG(CARRY_FLAG);
+  const uint8_t half_carry = (cpu->registers.a & 0x0F)
+  - (value & 0x0F) - ISSET_FLAG(cpu, CARRY_FLAG) > 0x0F;
+  if(half_carry) SET_FLAG(cpu, HALFCARRY_FLAG);
+  else CLEAR_FLAG(cpu, HALFCARRY_FLAG);
 
-  registers.a = (uint8_t) result;
+  if(result > UINT8_MAX) SET_FLAG(cpu, CARRY_FLAG);
+  else CLEAR_FLAG(cpu, CARRY_FLAG);
+
+  cpu->registers.a = (uint8_t) result;
 }
 
-void sbc(const uint8_t value) {
-  const uint16_t result = registers.a - value - ISSET_FLAG(CARRY_FLAG);
+void and(cpu_t *cpu) {
+  uint8_t value = get_value8(cpu);
 
-  if(result) CLEAR_FLAG(ZERO_FLAG);
-  else SET_FLAG(ZERO_FLAG);
+  const uint8_t result = cpu->registers.a & value;
 
-  SET_FLAG(NEGATIVE_FLAG);
+  if(result) CLEAR_FLAG(cpu, ZERO_FLAG);
+  else SET_FLAG(cpu, ZERO_FLAG);
 
-  const uint8_t half_carry =
-    (registers.a & 0x0F) - (value & 0x0F) - ISSET_FLAG(CARRY_FLAG) > 0x0F;
-  if(half_carry) SET_FLAG(HALFCARRY_FLAG);
-  else CLEAR_FLAG(HALFCARRY_FLAG);
+  CLEAR_FLAG(cpu, NEGATIVE_FLAG);
+  SET_FLAG(cpu, HALFCARRY_FLAG);
+  CLEAR_FLAG(cpu, CARRY_FLAG);
 
-  if(result > UINT8_MAX) SET_FLAG(CARRY_FLAG);
-  else CLEAR_FLAG(CARRY_FLAG);
-
-  registers.a = (uint8_t) result;
+  cpu->registers.a = (uint8_t) result;
 }
 
-void and(const uint8_t value) {
-  const uint8_t result = registers.a & value;
+void or(cpu_t *cpu) {
+  uint8_t value = get_value8(cpu);
 
-  if(result) CLEAR_FLAG(ZERO_FLAG);
-  else SET_FLAG(ZERO_FLAG);
+  const uint8_t result = cpu->registers.a | value;
 
-  CLEAR_FLAG(NEGATIVE_FLAG);
-  SET_FLAG(HALFCARRY_FLAG);
-  CLEAR_FLAG(CARRY_FLAG);
+  if(result) CLEAR_FLAG(cpu, ZERO_FLAG);
+  else SET_FLAG(cpu, ZERO_FLAG);
 
-  registers.a = (uint8_t) result;
+  CLEAR_FLAG(cpu, NEGATIVE_FLAG | HALFCARRY_FLAG | CARRY_FLAG);
+
+  cpu->registers.a = (uint8_t) result;
 }
 
-void or(const uint8_t value) {
-  const uint8_t result = registers.a | value;
+void xor(cpu_t *cpu) {
+  const uint8_t reg = cpu->opcode & 0x07;
 
-  if(result) CLEAR_FLAG(ZERO_FLAG);
-  else SET_FLAG(ZERO_FLAG);
+  uint8_t value = 0;
+  if (cpu->opcode & 0x40)
+    value = reg == 0x06 ? cpu->memory[cpu->registers.hl] : *cpu->r8[reg];
+  else value = cpu->memory[cpu->registers.pc + 1];
 
-  CLEAR_FLAG(NEGATIVE_FLAG | HALFCARRY_FLAG | CARRY_FLAG);
+  const uint8_t result = cpu->registers.a ^ value;
 
-  registers.a = (uint8_t) result;
+  if(result) CLEAR_FLAG(cpu, ZERO_FLAG);
+  else SET_FLAG(cpu, ZERO_FLAG);
+
+  CLEAR_FLAG(cpu, NEGATIVE_FLAG | HALFCARRY_FLAG | CARRY_FLAG);
+
+  cpu->registers.a = (uint8_t) result;
 }
 
-void xor(const uint8_t value) {
-  const uint8_t result = registers.a ^ value;
+void cp(cpu_t *cpu) {
+  uint8_t value = get_value8(cpu);
 
-  if(result) CLEAR_FLAG(ZERO_FLAG);
-  else SET_FLAG(ZERO_FLAG);
+  const uint16_t result = cpu->registers.a - value;
 
-  CLEAR_FLAG(NEGATIVE_FLAG | HALFCARRY_FLAG | CARRY_FLAG);
+  if(result) CLEAR_FLAG(cpu, ZERO_FLAG);
+  else SET_FLAG(cpu, ZERO_FLAG);
 
-  registers.a = (uint8_t) result;
+  SET_FLAG(cpu, NEGATIVE_FLAG);
+
+  const uint8_t half_carry = (cpu->registers.a & 0x0F) - (value & 0x0F) > 0x0F;
+  if(half_carry) SET_FLAG(cpu, HALFCARRY_FLAG);
+  else CLEAR_FLAG(cpu, HALFCARRY_FLAG);
+
+  if(result > UINT8_MAX) SET_FLAG(cpu, CARRY_FLAG);
+  else CLEAR_FLAG(cpu, CARRY_FLAG);
 }
 
-void cp(const uint8_t value) {
-  const uint16_t result = registers.a - value;
+void inc(cpu_t *cpu) {
+  const uint8_t *reg = cpu->r8[cpu->opcode & 0x07];
 
-  if(result) CLEAR_FLAG(ZERO_FLAG);
-  else SET_FLAG(ZERO_FLAG);
+  if(*reg) CLEAR_FLAG(cpu, ZERO_FLAG);
+  else SET_FLAG(cpu, ZERO_FLAG);
 
-  SET_FLAG(NEGATIVE_FLAG);
-
-  const uint8_t half_carry = (registers.a & 0x0F) - (value & 0x0F) > 0x0F;
-  if(half_carry) SET_FLAG(HALFCARRY_FLAG);
-  else CLEAR_FLAG(HALFCARRY_FLAG);
-
-  if(result > UINT8_MAX) SET_FLAG(CARRY_FLAG);
-  else CLEAR_FLAG(CARRY_FLAG);
-}
-
-void inc(const uint8_t *reg) {
-  if(*reg) CLEAR_FLAG(ZERO_FLAG);
-  else SET_FLAG(ZERO_FLAG);
-
-  CLEAR_FLAG(NEGATIVE_FLAG);
+  CLEAR_FLAG(cpu, NEGATIVE_FLAG);
 
   const uint8_t half_carry = (*reg & 0x0F) == 0x0F;
-  if(half_carry) SET_FLAG(CARRY_FLAG);
-  else CLEAR_FLAG(CARRY_FLAG);
+  if(half_carry) SET_FLAG(cpu, CARRY_FLAG);
+  else CLEAR_FLAG(cpu, CARRY_FLAG);
 
   *reg++;
 }
 
-void dec(const uint8_t *reg) {
-  if(*reg) CLEAR_FLAG(ZERO_FLAG);
-  else SET_FLAG(ZERO_FLAG);
+void dec(cpu_t *cpu) {
+  const uint8_t *reg = cpu->r8[cpu->opcode & 0x07];
 
-  SET_FLAG(NEGATIVE_FLAG);
+  if(*reg) CLEAR_FLAG(cpu, ZERO_FLAG);
+  else SET_FLAG(cpu, ZERO_FLAG);
+
+  SET_FLAG(cpu, NEGATIVE_FLAG);
 
   const uint8_t half_carry = (*reg & 0x0F) == 0x00;
-  if(half_carry) SET_FLAG(HALFCARRY_FLAG);
-  else CLEAR_FLAG(HALFCARRY_FLAG);
+  if(half_carry) SET_FLAG(cpu, HALFCARRY_FLAG);
+  else CLEAR_FLAG(cpu, HALFCARRY_FLAG);
 
   *reg--;
 }
 
 // 16-bit arithmetic
-void addhl(const uint16_t value) {
-  uint32_t result = registers.hl + value;
+void addhl(cpu_t *cpu) {
+  uint32_t result = cpu->registers.hl + value;
 
   CLEAR_FLAG(NEGATIVE_FLAG);
 
@@ -197,4 +233,4 @@ void inc16(const uint16_t *reg) {
 
 void dec16(const uint16_t *reg) {
   *reg--;
-}*/
+}
