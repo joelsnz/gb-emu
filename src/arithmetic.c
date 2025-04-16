@@ -196,35 +196,37 @@ void dec(cpu_t *cpu) {
 
 // 16-bit arithmetic
 void addhl(cpu_t *cpu) {
-  uint32_t result = cpu->registers.hl + value;
+  const uint8_t value = (cpu->opcode & 0x30) >> 4;
+  const uint32_t result = cpu->registers.hl + value;
 
-  CLEAR_FLAG(NEGATIVE_FLAG);
+  CLEAR_FLAG(cpu, NEGATIVE_FLAG);
 
   const uint16_t half_carry =
-    (registers.hl & 0x000F) + (value & 0x000F) > 0x000F;
-  if(half_carry) SET_FLAG(HALFCARRY_FLAG);
-  else CLEAR_FLAG(HALFCARRY_FLAG);
+    (cpu->registers.hl & 0x000F) + (value & 0x000F) > 0x000F;
+  if(half_carry) SET_FLAG(cpu, HALFCARRY_FLAG);
+  else CLEAR_FLAG(cpu, HALFCARRY_FLAG);
 
-  if(result > UINT16_MAX) SET_FLAG(CARRY_FLAG);
-  else CLEAR_FLAG(CARRY_FLAG);
+  if(result > UINT16_MAX) SET_FLAG(cpu, CARRY_FLAG);
+  else CLEAR_FLAG(cpu, CARRY_FLAG);
 
-  registers.hl = result;
+  cpu->registers.hl = result;
 }
 
-void addsp(const int8_t value) {
-  uint32_t result = registers.sp + value;
+void addsp(cpu_t *cpu) {
+  const uint8_t value = (cpu->opcode & 0x30) >> 4;
+  const uint32_t result = cpu->registers.sp + value;
 
-  CLEAR_FLAG(ZERO_FLAG | NEGATIVE_FLAG);
+  CLEAR_FLAG(cpu, ZERO_FLAG | NEGATIVE_FLAG);
 
   const uint16_t half_carry =
-    (registers.sp & 0x000F) + (value & 0x000F) > 0x000F;
-  if(half_carry) SET_FLAG(HALFCARRY_FLAG);
-  else CLEAR_FLAG(HALFCARRY_FLAG);
+    (cpu->registers.sp & 0x000F) + (value & 0x000F) > 0x000F;
+  if(half_carry) SET_FLAG(cpu, HALFCARRY_FLAG);
+  else CLEAR_FLAG(cpu, HALFCARRY_FLAG);
 
-  if(result > UINT16_MAX) SET_FLAG(CARRY_FLAG);
-  else CLEAR_FLAG(CARRY_FLAG);
+  if(result > UINT16_MAX) SET_FLAG(cpu, CARRY_FLAG);
+  else CLEAR_FLAG(cpu, CARRY_FLAG);
 
-  registers.sp = result;
+  cpu->registers.sp = result;
 }
 
 void inc16(const uint16_t *reg) {
