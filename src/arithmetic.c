@@ -196,7 +196,7 @@ void dec(cpu_t *cpu) {
 
 // 16-bit arithmetic
 void addhl(cpu_t *cpu) {
-  const uint8_t value = (cpu->opcode & 0x30) >> 4;
+  const uint16_t value = *cpu->r16[(cpu->opcode & 0x30) >> 4];
   const uint32_t result = cpu->registers.hl + value;
 
   CLEAR_FLAG(cpu, NEGATIVE_FLAG);
@@ -212,8 +212,8 @@ void addhl(cpu_t *cpu) {
   cpu->registers.hl = result;
 }
 
-void addsp(cpu_t *cpu) {
-  const uint8_t value = (cpu->opcode & 0x30) >> 4;
+/*void addsp(cpu_t *cpu) {
+  const uint16_t value = *cpu->r16[(cpu->opcode & 0x30) >> 4];
   const uint32_t result = cpu->registers.sp + value;
 
   CLEAR_FLAG(cpu, ZERO_FLAG | NEGATIVE_FLAG);
@@ -227,12 +227,12 @@ void addsp(cpu_t *cpu) {
   else CLEAR_FLAG(cpu, CARRY_FLAG);
 
   cpu->registers.sp = result;
+}*/
+
+void inc16(cpu_t *cpu) {
+  cpu->r16[(cpu->opcode & 0x30) >> 4]++;
 }
 
-void inc16(const uint16_t *reg) {
-  *reg++;
-}
-
-void dec16(const uint16_t *reg) {
-  *reg--;
+void dec16(cpu_t *cpu) {
+  cpu->r16[(cpu->opcode & 0x30) >> 4]--;
 }
