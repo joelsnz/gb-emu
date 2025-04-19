@@ -1,8 +1,6 @@
 #ifndef ARITHMETIC_H
 #define ARITHMETIC_H
 
-#include <stdint.h>
-
 #include "cpu.h"
 
 // 8-bit arithmetic

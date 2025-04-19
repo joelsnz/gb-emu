@@ -1,10 +1,10 @@
 #ifndef BIT_H
 #define BIT_H
 
-#include <stdint.h>
+#include "cpu.h"
 
-void bit(uint8_t index, uint8_t *reg);
-void set(uint8_t index, uint8_t *reg);
-void res(uint8_t index, uint8_t *reg);
+void bit(cpu_t *cpu);
+void set(cpu_t *cpu);
+void res(cpu_t *cpu);
 
 #endif //BIT_H

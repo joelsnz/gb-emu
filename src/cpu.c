@@ -33,3 +33,5 @@ uint8_t *get_r16(const cpu_t *cpu) {
   const uint16_t reg = (cpu->opcode & 0x30) >> 4;
   return cpu->r16[reg];
 }
+
+uint8_t get_b3(const cpu_t *cpu) { return (cpu->opcode & 0x38) >> 3; }

@@ -1,6 +1,5 @@
 #include "shifts.h"
 
-#include "cpu.h"
 #include "flags.h"
 
 void rlca(cpu_t *cpu) {

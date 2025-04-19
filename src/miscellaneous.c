@@ -1,6 +1,5 @@
 #include "miscellaneous.h"
 
-#include "cpu.h"
 #include "flags.h"
 
 void swap(cpu_t *cpu) {

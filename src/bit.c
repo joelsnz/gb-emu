@@ -1,18 +1,25 @@
-#include "registers.h"
-#include "memory.h"
-#include "flags.h"
-
 #include "bit.h"
 
-void bit(uint8_t index, uint8_t *reg) {
-	if(*reg & 1 << index) CLEAR_FLAG(ZERO_FLAG);
-	else SET_FLAG(ZERO_FLAG);
+#include "flags.h"
+
+void bit(cpu_t *cpu) {
+  uint8_t index = get_b3(cpu);
+  uint8_t *reg = *get_lower_r8(cpu);
+
+  if(*reg & 1 << index) CLEAR_FLAG(cpu, ZERO_FLAG);
+  else SET_FLAG(cpu, ZERO_FLAG);
 }
 
-void set(uint8_t index, uint8_t *reg) {
-	*reg |= 1 << index;
+void set(cpu_t *cpu) {
+  uint8_t index = get_b3(cpu);
+  uint8_t *reg = *get_lower_r8(cpu);
+
+  *reg |= (1 << index);
 }
 
-void res(uint8_t index, uint8_t *reg) {
-	*reg &= ~(1 << index);
+void res(cpu_t *cpu) {
+  uint8_t index = get_b3(cpu);
+  uint8_t *reg = *get_lower_r8(cpu);
+
+  *reg &= ~(1 << index);
 }

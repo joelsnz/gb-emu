@@ -1,7 +1,7 @@
 #ifndef MISCELLANEOUS_H
 #define MISCELLANEOUS_H
 
-#include <stdint.h>
+#include "cpu.h"
 
 void swap(cpu_t *cpu);
 void daa(cpu_t *cpu);

@@ -1,7 +1,7 @@
 #ifndef SHIFTS_H
 #define SHIFTS_H
 
-#include <stdint.h>
+#include "cpu.h"
 
 void rlca(cpu_t *cpu);
 void rla(cpu_t *cpu);
