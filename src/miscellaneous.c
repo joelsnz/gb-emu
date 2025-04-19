@@ -1,54 +1,54 @@
-#include "registers.h"
-#include "memory.h"
-#include "flags.h"
-
 #include "miscellaneous.h"
 
-void swap(uint8_t *reg) {
-	uint8_t result = (*reg << 4) | (*reg >> 4);
+#include "cpu.h"
+#include "flags.h"
 
-	if(result) CLEAR_FLAG(ZERO_FLAG);
-	else SET_FLAG(ZERO_FLAG);
+void swap(cpu_t *cpu) {
+  uint8_t *reg = get_lower_r8(cpu);
+  uint8_t result = (*reg << 4) | (*reg >> 4);
 
-	CLEAR_FLAG(NEGATIVE_FLAG | HALFCARRY_FLAG | CARRY_FLAG);
+  if(result) CLEAR_FLAG(cpu, ZERO_FLAG);
+  else SET_FLAG(cpu, ZERO_FLAG);
 
-	*reg = result;
+  CLEAR_FLAG(cpu, NEGATIVE_FLAG | HALFCARRY_FLAG | CARRY_FLAG);
+
+  *reg = result;
 }
 
-void daa(void) {
-	uint16_t result = registers.a;
+void daa(cpu_t *cpu) {
+  uint16_t result = cpu->registers.a;
 
-	if((result & 0x0F) > 0x09) result += 0x06;
-	if((result & 0xF0) > 0x90) result += 0x60;
+  if((result & 0x0F) > 0x09) result += 0x06;
+  if((result & 0xF0) > 0x90) result += 0x60;
 
-	if(result) CLEAR_FLAG(ZERO_FLAG);
-	else SET_FLAG(ZERO_FLAG);
+  if(result) CLEAR_FLAG(cpu, ZERO_FLAG);
+  else SET_FLAG(cpu, ZERO_FLAG);
 
-	CLEAR_FLAG(HALFCARRY_FLAG);
+  CLEAR_FLAG(cpu, HALFCARRY_FLAG);
 
-	if(result > UINT16_MAX) SET_FLAG(CARRY_FLAG);
-	else CLEAR_FLAG(CARRY_FLAG);
+  if(result > UINT16_MAX) SET_FLAG(cpu, CARRY_FLAG);
+  else CLEAR_FLAG(cpu, CARRY_FLAG);
 
-	registers.a = result;
+  cpu->registers.a = result;
 }
 
-void cpl(void) {
-	SET_FLAG(NEGATIVE_FLAG | HALFCARRY_FLAG);
+void cpl(cpu_t *cpu) {
+  SET_FLAG(cpu, NEGATIVE_FLAG | HALFCARRY_FLAG);
 
-	registers.a = ~registers.a;
+  cpu->registers.a = ~cpu->registers.a;
 }
 
-void ccf(void) {
-	CLEAR_FLAG(NEGATIVE_FLAG | HALFCARRY_FLAG);
+void ccf(cpu_t *cpu) {
+  CLEAR_FLAG(cpu, NEGATIVE_FLAG | HALFCARRY_FLAG);
 
-	if(ISSET_FLAG(CARRY_FLAG)) CLEAR_FLAG(CARRY_FLAG);
-	else SET_FLAG(CARRY_FLAG);
+  if(ISSET_FLAG(cpu, CARRY_FLAG)) CLEAR_FLAG(cpu, CARRY_FLAG);
+  else SET_FLAG(cpu, CARRY_FLAG);
 }
 
-void scf(void) {
-	CLEAR_FLAG(NEGATIVE_FLAG | HALFCARRY_FLAG);
+void scf(cpu_t *cpu) {
+  CLEAR_FLAG(cpu, NEGATIVE_FLAG | HALFCARRY_FLAG);
 
-	SET_FLAG(CARRY_FLAG);
+  SET_FLAG(cpu, CARRY_FLAG);
 }
 
-void nop(void) {;}
+void nop(void) { ; }
