@@ -14,5 +14,9 @@ typedef struct {
 
 void init_cpu(cpu_t *cpu);
 void get_opcode(cpu_t *cpu);
+void *get_lower_r8(const cpu_t *cpu);
+void *get_middle_r8(const cpu_t *cpu);
+void *get_imm8(const cpu_t *cpu);
+void *get_r16(const cpu_t *cpu);
 
 #endif //CPU_H
