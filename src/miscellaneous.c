@@ -50,4 +50,4 @@ void scf(cpu_t *cpu) {
   SET_FLAG(cpu, CARRY_FLAG);
 }
 
-void nop(void) { ; }
+void nop(cpu_t *cpu) { ; }

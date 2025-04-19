@@ -226,6 +226,6 @@ void addsp(cpu_t *cpu) {
   cpu->registers.sp = result;
 }
 
-void inc16(cpu_t *cpu) { *get_r16(cpu)++; }
+void inc16(cpu_t *cpu) { (*get_r16(cpu))++; }
 
-void dec16(cpu_t *cpu) { *get_r16(cpu)--; }
+void dec16(cpu_t *cpu) { (*get_r16(cpu))--; }

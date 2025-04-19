@@ -59,7 +59,7 @@ void rra(cpu_t *cpu) {
 }
 
 void rlc(cpu_t *cpu) {
-  uint8_t *reg = *get_lower_r8(cpu);
+  uint8_t *reg = get_lower_r8(cpu);
   uint8_t result = *reg << 1;
 
   CLEAR_FLAG(cpu, NEGATIVE_FLAG | HALFCARRY_FLAG);
@@ -78,7 +78,7 @@ void rlc(cpu_t *cpu) {
 }
 
 void rl(cpu_t *cpu) {
-  uint8_t *reg = *get_lower_r8(cpu);
+  uint8_t *reg = get_lower_r8(cpu);
   uint8_t result = *reg << 1;
 
   result += ISSET_FLAG(cpu, CARRY_FLAG);
@@ -95,7 +95,7 @@ void rl(cpu_t *cpu) {
 }
 
 void rrc(cpu_t *cpu) {
-  uint8_t *reg = *get_lower_r8(cpu);
+  uint8_t *reg = get_lower_r8(cpu);
   uint8_t result = *reg >> 1;
 
   CLEAR_FLAG(cpu, NEGATIVE_FLAG | HALFCARRY_FLAG);
@@ -114,7 +114,7 @@ void rrc(cpu_t *cpu) {
 }
 
 void rr(cpu_t *cpu) {
-  uint8_t *reg = *get_lower_r8(cpu);
+  uint8_t *reg = get_lower_r8(cpu);
   uint8_t result = *reg >> 1;
 
   result += ISSET_FLAG(cpu, CARRY_FLAG) ? 0x80 : 0x00;
@@ -131,7 +131,7 @@ void rr(cpu_t *cpu) {
 }
 
 void sla(cpu_t *cpu) {
-  uint8_t *reg = *get_lower_r8(cpu);
+  uint8_t *reg = get_lower_r8(cpu);
   uint8_t result = *reg << 1;
 
   if(result) CLEAR_FLAG(cpu, ZERO_FLAG);
@@ -146,7 +146,7 @@ void sla(cpu_t *cpu) {
 }
 
 void sra(cpu_t *cpu) {
-  uint8_t *reg = *get_lower_r8(cpu);
+  uint8_t *reg = get_lower_r8(cpu);
   uint8_t result = (*reg >> 1) | (*reg & 0x80);
 
   if(result) CLEAR_FLAG(cpu, ZERO_FLAG);
@@ -161,7 +161,7 @@ void sra(cpu_t *cpu) {
 }
 
 void srl(cpu_t *cpu) {
-  uint8_t *reg = *get_lower_r8(cpu);
+  uint8_t *reg = get_lower_r8(cpu);
   uint8_t result = *reg >> 1;
 
   if(result) CLEAR_FLAG(cpu, ZERO_FLAG);
