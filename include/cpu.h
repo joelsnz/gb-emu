@@ -14,6 +14,8 @@ typedef struct {
 
 void init_cpu(cpu_t *cpu);
 void get_opcode(cpu_t *cpu);
+void step(cpu_t *cpu);
+
 uint8_t *get_lower_r8(cpu_t *cpu);
 uint8_t *get_middle_r8(cpu_t *cpu);
 uint8_t*get_imm8(cpu_t *cpu);

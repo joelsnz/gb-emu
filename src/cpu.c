@@ -1,12 +1,21 @@
 #include "cpu.h"
 
+#include "instructions.h"
+
 void init_cpu(cpu_t *cpu) {
   init_r8(&cpu->registers, cpu->r8);
   init_r16(&cpu->registers, cpu->r16);
+  init_instr_list();
 }
 
 void get_opcode(cpu_t *cpu) {
   cpu->opcode = cpu->memory[cpu->registers.pc];
+}
+
+void step(cpu_t *cpu) {
+  get_opcode(cpu);
+  base_instr_list[cpu->opcode].instruction(cpu);
+  cpu->registers.pc += base_instr_list[cpu->opcode].bytes;
 }
 
 uint8_t *get_lower_r8(cpu_t *cpu) {
