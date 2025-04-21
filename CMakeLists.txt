@@ -15,6 +15,7 @@ set(SOURCES
   src/miscellaneous.c
   src/shifts.c
   src/bit.c
+        src/jump.c
 )
 
 add_executable(${PROJECT_NAME} ${SOURCES})

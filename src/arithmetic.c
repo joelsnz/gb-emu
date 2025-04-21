@@ -5,7 +5,7 @@
 // 8-bit ALU
 void add(cpu_t *cpu) {
   uint8_t value =
-      cpu->opcode & 0x40 ? *get_imm8(cpu) : *get_lower_r8(cpu);
+      cpu->opcode & 0x40 ? get_imm8(cpu) : *get_lower_r8(cpu);
 
   const uint16_t result = cpu->registers.a + value;
 
@@ -27,7 +27,7 @@ void add(cpu_t *cpu) {
 
 void adc(cpu_t *cpu) {
   uint8_t value =
-      cpu->opcode & 0x40 ? *get_imm8(cpu) : *get_lower_r8(cpu);
+      cpu->opcode & 0x40 ? get_imm8(cpu) : *get_lower_r8(cpu);
 
   const uint16_t result =
       cpu->registers.a + value + ISSET_FLAG(cpu, CARRY_FLAG);
@@ -52,7 +52,7 @@ void adc(cpu_t *cpu) {
 
 void sub(cpu_t *cpu) {
   uint8_t value =
-      cpu->opcode & 0x40 ? *get_imm8(cpu) : *get_lower_r8(cpu);
+      cpu->opcode & 0x40 ? get_imm8(cpu) : *get_lower_r8(cpu);
 
   const uint16_t result = cpu->registers.a - value;
 
@@ -74,7 +74,7 @@ void sub(cpu_t *cpu) {
 
 void sbc(cpu_t *cpu) {
   uint8_t value =
-      cpu->opcode & 0x40 ? *get_imm8(cpu) : *get_lower_r8(cpu);
+      cpu->opcode & 0x40 ? get_imm8(cpu) : *get_lower_r8(cpu);
 
   const uint16_t result =
       cpu->registers.a - value - ISSET_FLAG(cpu, CARRY_FLAG);
@@ -99,7 +99,7 @@ void sbc(cpu_t *cpu) {
 
 void and_(cpu_t *cpu) {
   uint8_t value =
-      cpu->opcode & 0x40 ? *get_imm8(cpu) : *get_lower_r8(cpu);
+      cpu->opcode & 0x40 ? get_imm8(cpu) : *get_lower_r8(cpu);
 
   const uint8_t result = cpu->registers.a & value;
 
@@ -115,7 +115,7 @@ void and_(cpu_t *cpu) {
 
 void or_(cpu_t *cpu) {
   uint8_t value =
-      cpu->opcode & 0x40 ? *get_imm8(cpu) : *get_lower_r8(cpu);
+      cpu->opcode & 0x40 ? get_imm8(cpu) : *get_lower_r8(cpu);
 
   const uint8_t result = cpu->registers.a | value;
 
@@ -129,7 +129,7 @@ void or_(cpu_t *cpu) {
 
 void xor_(cpu_t *cpu) {
   uint8_t value =
-      cpu->opcode & 0x40 ? *get_imm8(cpu) : *get_lower_r8(cpu);
+      cpu->opcode & 0x40 ? get_imm8(cpu) : *get_lower_r8(cpu);
 
   const uint8_t result = cpu->registers.a ^ value;
 
@@ -143,7 +143,7 @@ void xor_(cpu_t *cpu) {
 
 void cp(cpu_t *cpu) {
   uint8_t value =
-      cpu->opcode & 0x40 ? *get_imm8(cpu) : *get_lower_r8(cpu);
+      cpu->opcode & 0x40 ? get_imm8(cpu) : *get_lower_r8(cpu);
 
   const uint16_t result = cpu->registers.a - value;
 
@@ -193,7 +193,7 @@ void dec(cpu_t *cpu) {
 
 // 16-bit arithmetic
 void addhl(cpu_t *cpu) {
-  const uint16_t value = *get_r16(cpu);
+  const uint16_t value  = *get_r16(cpu);
   const uint32_t result = cpu->registers.hl + value;
 
   CLEAR_FLAG(cpu, NEGATIVE_FLAG);
@@ -210,7 +210,7 @@ void addhl(cpu_t *cpu) {
 }
 
 void addsp(cpu_t *cpu) {
-  const uint8_t value = *get_imm8(cpu);
+  const uint8_t value   = get_imm8(cpu);
   const uint32_t result = cpu->registers.sp + value;
 
   CLEAR_FLAG(cpu, ZERO_FLAG | NEGATIVE_FLAG);

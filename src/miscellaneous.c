@@ -3,7 +3,7 @@
 #include "flags.h"
 
 void swap(cpu_t *cpu) {
-  uint8_t *reg = get_lower_r8(cpu);
+  uint8_t *reg   = get_lower_r8(cpu);
   uint8_t result = (*reg << 4) | (*reg >> 4);
 
   if(result) CLEAR_FLAG(cpu, ZERO_FLAG);
@@ -51,3 +51,8 @@ void scf(cpu_t *cpu) {
 }
 
 void nop(cpu_t *cpu) { ; }
+
+void halt(cpu_t *cpu) {} // tbi
+void stop(cpu_t *cpu) {} // tbi
+void di(cpu_t *cpu) {}   // tbi
+void ei(cpu_t *cpu) {}   // tbi

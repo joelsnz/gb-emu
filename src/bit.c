@@ -14,12 +14,12 @@ void set(cpu_t *cpu) {
   uint8_t index = get_b3(cpu);
   uint8_t *reg = get_lower_r8(cpu);
 
-  *reg |= (1 << index);
+  if(index) *reg |= (1 << index - 1);
 }
 
 void res(cpu_t *cpu) {
   uint8_t index = get_b3(cpu);
   uint8_t *reg = get_lower_r8(cpu);
 
-  *reg &= ~(1 << index);
+  if(index) *reg &= ~(1 << index - 1);
 }
