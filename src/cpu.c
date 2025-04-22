@@ -6,6 +6,7 @@
 void init_cpu(cpu_t *cpu) {
   init_r8(&cpu->registers, cpu->r8);
   init_r16(&cpu->registers, cpu->r16);
+  init_r16mem(&cpu->registers, cpu->r16mem);
   init_instr_list(cpu);
 }
 
@@ -19,7 +20,7 @@ void get_next_opcode(cpu_t *cpu) {
 
 void step(cpu_t *cpu) {
   get_opcode(cpu);
-  uint16_t actual_pc  = cpu->registers.pc;
+  uint16_t actual_pc = cpu->registers.pc;
   instruction_t instr = base_instr_list[cpu->opcode];
   if(cpu->opcode == 0xcb) { // prefixed instruction
     get_next_opcode(cpu);
@@ -58,6 +59,14 @@ uint16_t get_imm16(cpu_t *cpu) {
 uint16_t *get_r16(cpu_t *cpu) {
   const uint16_t reg = (cpu->opcode & 0x30) >> 4;
   return cpu->r16[reg];
+}
+
+uint16_t *get_r16mem(cpu_t *cpu) {
+  const uint16_t i = (cpu->opcode & 0x30) >> 4;
+  const uint16_t *reg = cpu->r16mem[i];
+  if(i == 2) cpu->registers.hl++;
+  if(i == 3) cpu->registers.hl--;
+  return reg;
 }
 
 uint8_t get_b3(cpu_t *cpu) { return (cpu->opcode & 0x38) >> 3; }

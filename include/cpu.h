@@ -8,6 +8,8 @@ typedef struct {
 	registers_t registers;
 	uint8_t *r8[8];
 	uint16_t *r16[4];
+	uint16_t *r16mem[4];
+  uint8_t ime;
 	uint8_t memory[0xFFFF + 1];
 	uint8_t opcode;
 } cpu_t;
@@ -22,6 +24,7 @@ uint8_t *get_middle_r8(cpu_t *cpu);
 uint8_t get_imm8(cpu_t *cpu);
 uint16_t get_imm16(cpu_t *cpu);
 uint16_t *get_r16(cpu_t *cpu);
+uint16_t *get_r16mem(cpu_t *cpu);
 uint8_t get_b3(cpu_t *cpu);
 uint8_t get_cond(cpu_t *cpu);
 

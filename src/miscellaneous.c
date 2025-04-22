@@ -54,5 +54,7 @@ void nop(cpu_t *cpu) { ; }
 
 void halt(cpu_t *cpu) {} // tbi
 void stop(cpu_t *cpu) {} // tbi
-void di(cpu_t *cpu) {}   // tbi
-void ei(cpu_t *cpu) {}   // tbi
+
+void di(cpu_t *cpu) { cpu->ime = 0; }
+
+void ei(cpu_t *cpu) { cpu->ime = 1; }
