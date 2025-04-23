@@ -39,5 +39,6 @@ typedef struct {
 void init_r8(registers_t *r, uint8_t **table);
 void init_r16(registers_t *r, uint16_t **table);
 void init_r16mem(registers_t *r, uint16_t **table);
+void init_r16stk(registers_t *r, uint16_t **table);
 
 #endif // REGISTERS_H

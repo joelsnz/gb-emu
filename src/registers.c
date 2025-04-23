@@ -26,3 +26,10 @@ void init_r16mem(registers_t *r, uint16_t **table) {
   table[2] = &r->hl; // hli
   table[3] = &r->hl; // hld
 }
+
+void init_r16stk(registers_t *r, uint16_t **table) {
+  table[0] = &r->bc;
+  table[1] = &r->de;
+  table[2] = &r->hl;
+  table[3] = &r->af;
+}

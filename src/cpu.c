@@ -7,6 +7,7 @@ void init_cpu(cpu_t *cpu) {
   init_r8(&cpu->registers, cpu->r8);
   init_r16(&cpu->registers, cpu->r16);
   init_r16mem(&cpu->registers, cpu->r16mem);
+  init_r16stk(&cpu->registers, cpu->r16stk);
   init_instr_list(cpu);
 }
 
@@ -67,6 +68,11 @@ uint16_t *get_r16mem(cpu_t *cpu) {
   if(i == 2) cpu->registers.hl++;
   if(i == 3) cpu->registers.hl--;
   return reg;
+}
+
+uint16_t *get_r16stk(cpu_t *cpu) {
+  const uint16_t reg = (cpu->opcode & 0x30) >> 4;
+  return cpu->r16stk[reg];
 }
 
 uint8_t get_b3(cpu_t *cpu) { return (cpu->opcode & 0x38) >> 3; }

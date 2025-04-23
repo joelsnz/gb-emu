@@ -16,8 +16,7 @@ void ldhi(cpu_t *cpu);  // a <- ($ff00 + imm8) 0x11110000
 void ldhfi(cpu_t *cpu); // ($ff00 + imm8) <- a 0x11100000
 
 // 16-bit loads
-void ld16(cpu_t *cpu);   // r16 <- r16 0x00...0001
-void ldi16(cpu_t *cpu);  // r16 <- imm16
+void ldi16(cpu_t *cpu);  // r16 <- imm16 0x00..0001
 void ldsp(cpu_t *cpu);   // (imm16) <- sp 0x00001000
 void ldsphl(cpu_t *cpu); // sp <- hl 0x11111001
 void ldhlsp(cpu_t *cpu); // hl <- sp + imm8 0x11111000
