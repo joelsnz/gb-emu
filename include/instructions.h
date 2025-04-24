@@ -15,6 +15,7 @@ extern instruction_t prefix_instr_list[0xFF + 1];
 void init_arithmetic_list(void);
 void init_bit_list(void);
 void init_jump_list(cpu_t *cpu);
+void init_load_list(void) {}
 void init_misc_list(void);
 void init_shifts_list(void);
 void init_instr_list(cpu_t *cpu);

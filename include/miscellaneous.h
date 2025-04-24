@@ -11,7 +11,7 @@ void scf(cpu_t *cpu);
 void nop(cpu_t *cpu);
 void halt(cpu_t *cpu); // tbi
 void stop(cpu_t *cpu); // tbi
-void di(cpu_t *cpu); // tbi
-void ei(cpu_t *cpu); // tbi
+void di(cpu_t *cpu);
+void ei(cpu_t *cpu);
 
 #endif //MISCELLANEOUS_H
