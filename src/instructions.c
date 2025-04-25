@@ -2,6 +2,7 @@
 
 #include "arithmetic.h"
 #include "bit.h"
+#include "call.h"
 #include "jump.h"
 #include "load.h"
 #include "miscellaneous.h"
@@ -71,6 +72,21 @@ void init_bit_list(void) {
         (instruction_t){.instruction = set,
                         .bytes = 2,
                         .cycles = (i & 0x06) == 0x06 ? 4 : 2};
+}
+
+void init_call_list(cpu_t *cpu) {
+  base_instr_list[0xcd] =
+      (instruction_t){.instruction = call, .bytes = 3, .cycles = 6};
+
+  for(int i = 0xc4; i <= 0xdc; i += 0x08)
+    base_instr_list[0xcd] =
+        (instruction_t){.instruction = call,
+                        .bytes = 3,
+                        .cycles = get_cond(cpu) ? 6 : 3};
+
+  for(int i = 0xc7; i <= 0xff; i += 0x08)
+    base_instr_list[0xcd] =
+        (instruction_t){.instruction = rst, .bytes = 1, .cycles = 8};
 }
 
 void init_jump_list(cpu_t *cpu) {
@@ -227,6 +243,7 @@ void init_shifts_list(void) {
 void init_instr_list(cpu_t *cpu) {
   init_arithmetic_list();
   init_bit_list();
+  init_call_list(cpu);
   init_jump_list(cpu);
   init_load_list();
   init_misc_list();

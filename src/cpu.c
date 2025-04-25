@@ -54,7 +54,7 @@ uint8_t get_imm8(cpu_t *cpu) {
 }
 
 uint16_t get_imm16(cpu_t *cpu) {
-  return (cpu->memory[cpu->registers.pc + 2] << 8) + get_imm8(cpu);
+  return (cpu->memory[cpu->registers.pc + 2] << 8) | get_imm8(cpu);
 }
 
 uint16_t *get_r16(cpu_t *cpu) {
