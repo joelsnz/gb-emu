@@ -162,7 +162,7 @@ void cp(cpu_t *cpu) {
 }
 
 void inc(cpu_t *cpu) {
-  const uint8_t *reg = get_middle_r8(cpu);
+  uint8_t *reg = get_middle_r8(cpu);
 
   if(*reg) CLEAR_FLAG(cpu, ZERO_FLAG);
   else SET_FLAG(cpu, ZERO_FLAG);
@@ -173,11 +173,11 @@ void inc(cpu_t *cpu) {
   if(half_carry) SET_FLAG(cpu, CARRY_FLAG);
   else CLEAR_FLAG(cpu, CARRY_FLAG);
 
-  *reg++;
+  *reg += 1;
 }
 
 void dec(cpu_t *cpu) {
-  const uint8_t *reg = get_middle_r8(cpu);
+  uint8_t *reg = get_middle_r8(cpu);
 
   if(*reg) CLEAR_FLAG(cpu, ZERO_FLAG);
   else SET_FLAG(cpu, ZERO_FLAG);
@@ -188,7 +188,7 @@ void dec(cpu_t *cpu) {
   if(half_carry) SET_FLAG(cpu, HALFCARRY_FLAG);
   else CLEAR_FLAG(cpu, HALFCARRY_FLAG);
 
-  *reg--;
+  *reg -= 1;
 }
 
 // 16-bit arithmetic
