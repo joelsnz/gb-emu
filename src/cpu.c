@@ -64,7 +64,7 @@ uint16_t *get_r16(cpu_t *cpu) {
 
 uint16_t *get_r16mem(cpu_t *cpu) {
   const uint16_t i = (cpu->opcode & 0x30) >> 4;
-  const uint16_t *reg = cpu->r16mem[i];
+  uint16_t *reg = cpu->r16mem[i];
   if(i == 2) cpu->registers.hl++;
   if(i == 3) cpu->registers.hl--;
   return reg;
@@ -73,6 +73,11 @@ uint16_t *get_r16mem(cpu_t *cpu) {
 uint16_t *get_r16stk(cpu_t *cpu) {
   const uint16_t reg = (cpu->opcode & 0x30) >> 4;
   return cpu->r16stk[reg];
+}
+
+uint8_t get_tgt3(cpu_t *cpu) {
+  const uint8_t target = (cpu->opcode & 0x38) >> 3;
+  return target * 0x08;
 }
 
 uint8_t get_b3(cpu_t *cpu) { return (cpu->opcode & 0x38) >> 3; }

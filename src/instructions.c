@@ -79,14 +79,26 @@ void init_call_list(cpu_t *cpu) {
       (instruction_t){.instruction = call, .bytes = 3, .cycles = 6};
 
   for(int i = 0xc4; i <= 0xdc; i += 0x08)
-    base_instr_list[0xcd] =
-        (instruction_t){.instruction = call,
+    base_instr_list[i] =
+        (instruction_t){.instruction = callc,
                         .bytes = 3,
                         .cycles = get_cond(cpu) ? 6 : 3};
 
   for(int i = 0xc7; i <= 0xff; i += 0x08)
-    base_instr_list[0xcd] =
-        (instruction_t){.instruction = rst, .bytes = 1, .cycles = 8};
+    base_instr_list[i] =
+        (instruction_t){.instruction = rst, .bytes = 1, .cycles = 4};
+
+  base_instr_list[0xc9] =
+      (instruction_t){.instruction = ret, .bytes = 1, .cycles = 4};
+
+  for(int i = 0xc0; i <= 0xd8; i += 0x08)
+    base_instr_list[i] =
+        (instruction_t){.instruction = rst,
+                        .bytes = 1,
+                        .cycles = get_cond(cpu) ? 5 : 2};
+
+  base_instr_list[0xd9] =
+      (instruction_t){.instruction = reti, .bytes = 1, .cycles = 4};
 }
 
 void init_jump_list(cpu_t *cpu) {

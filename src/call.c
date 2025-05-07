@@ -1,7 +1,9 @@
 #include "call.h"
 
+#include "miscellaneous.h"
+
 void call(cpu_t *cpu) {
-  uint16_t sp = cpu->registers.sp;
+  uint16_t *sp = &cpu->registers.sp;
   uint16_t ret_addr = cpu->registers.pc + 0x03; // after imm16
 
   cpu->memory[--(*sp)] = (ret_addr >> 8) & 0xFF;
@@ -16,16 +18,28 @@ void callc(cpu_t *cpu) {
 
 void rst(cpu_t *cpu) {
   uint16_t *sp = &cpu->registers.sp;
-  uint16_t ret_addr = cpu->registers.pc; // after imm16
+  uint16_t ret_addr = cpu->registers.pc;
 
   cpu->memory[--(*sp)] = (ret_addr >> 8) & 0xFF;
   cpu->memory[--(*sp)] = ret_addr & 0xFF;
 
-  cpu->registers.pc = 0x00FF;
+  cpu->registers.pc = (uint16_t)get_tgt3(cpu) & 0x00FF;
 }
 
-void ret(cpu_t *cpu) {}
+void ret(cpu_t *cpu) {
+  uint16_t *sp = &cpu->registers.sp;
 
-void retc(cpu_t *cpu) {}
+  uint8_t pcl = cpu->memory[(*sp)++];
+  uint8_t pch = cpu->memory[(*sp)++];
 
-void reti(cpu_t *cpu) {}
+  cpu->registers.pc = ((uint16_t)pch << 8) | pcl;
+}
+
+void retc(cpu_t *cpu) {
+  if(get_cond(cpu)) ret(cpu);
+}
+
+void reti(cpu_t *cpu) {
+  ret(cpu);
+  ei(cpu);
+}

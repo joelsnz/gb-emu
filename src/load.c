@@ -17,15 +17,15 @@ void ldi(cpu_t *cpu) {
 }
 
 void lda(cpu_t *cpu) {
-  uint8_t *reg = get_r16mem(cpu);
+  uint16_t source = *get_r16mem(cpu);
 
-  cpu->registers.a = *reg;
+  cpu->registers.a = cpu->memory[source];
 }
 
 void ldfa(cpu_t *cpu) {
-  uint8_t *reg = get_r16mem(cpu);
+  uint8_t dest = *get_r16mem(cpu);
 
-  *reg = cpu->registers.a;
+  cpu->memory[dest] = cpu->registers.a;
 }
 
 void ldad(cpu_t *cpu) {

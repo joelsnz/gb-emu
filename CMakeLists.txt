@@ -17,6 +17,7 @@ set(SOURCES
   src/bit.c
   src/jump.c
   src/load.c
+  src/call.c
 )
 
 add_executable(${PROJECT_NAME} ${SOURCES})
