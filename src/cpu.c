@@ -12,11 +12,11 @@ void init_cpu(cpu_t *cpu) {
 }
 
 void get_opcode(cpu_t *cpu) {
-  cpu->opcode = cpu->memory[cpu->registers.pc];
+  cpu->opcode = cpu->memory.raw[cpu->registers.pc];
 }
 
 void get_next_opcode(cpu_t *cpu) {
-  cpu->opcode = cpu->memory[cpu->registers.pc + 1];
+  cpu->opcode = cpu->memory.raw[cpu->registers.pc + 1];
 }
 
 void step(cpu_t *cpu) {
@@ -37,7 +37,7 @@ uint8_t *get_lower_r8(cpu_t *cpu) {
   const uint8_t reg = cpu->opcode & 0x07;
 
   return reg == 0x06 // r8 value
-             ? &cpu->memory[cpu->registers.hl]
+             ? &cpu->memory.raw[cpu->registers.hl]
              : cpu->r8[reg];
 }
 
@@ -45,16 +45,16 @@ uint8_t *get_middle_r8(cpu_t *cpu) {
   const uint8_t reg = (cpu->opcode & 0x38) >> 3;
 
   return reg == 0x06 // r8 value
-             ? &cpu->memory[cpu->registers.hl]
+             ? &cpu->memory.raw[cpu->registers.hl]
              : cpu->r8[reg];
 }
 
 uint8_t get_imm8(cpu_t *cpu) {
-  return cpu->memory[cpu->registers.pc + 1];
+  return cpu->memory.raw[cpu->registers.pc + 1];
 }
 
 uint16_t get_imm16(cpu_t *cpu) {
-  return (cpu->memory[cpu->registers.pc + 2] << 8) | get_imm8(cpu);
+  return (cpu->memory.raw[cpu->registers.pc + 2] << 8) | get_imm8(cpu);
 }
 
 uint16_t *get_r16(cpu_t *cpu) {

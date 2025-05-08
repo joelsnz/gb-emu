@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #include "registers.h"
+#include "memory.h"
 
 typedef struct {
 	registers_t registers;
@@ -11,7 +12,7 @@ typedef struct {
 	uint16_t *r16mem[4];
   uint16_t *r16stk[4];
   uint8_t ime;
-	uint8_t memory[0xFFFF + 1];
+	memory_t memory;
 	uint8_t opcode;
 } cpu_t;
 
