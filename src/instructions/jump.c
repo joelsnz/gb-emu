@@ -1,4 +1,4 @@
-#include "jump.h"
+#include "instructions/jump.h"
 
 void jp(cpu_t *cpu) { cpu->registers.pc = get_imm16(cpu); }
 

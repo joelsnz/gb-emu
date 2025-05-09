@@ -1,4 +1,4 @@
-#include "arithmetic.h"
+#include "instructions/arithmetic.h"
 
 #include "flags.h"
 

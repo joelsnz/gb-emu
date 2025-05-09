@@ -1,4 +1,4 @@
-#include "bit.h"
+#include "instructions/bit.h"
 
 #include "flags.h"
 

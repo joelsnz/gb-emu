@@ -1,12 +1,12 @@
-#include "instructions.h"
+#include "instructions/instructions.h"
 
-#include "arithmetic.h"
-#include "bit.h"
-#include "call.h"
-#include "jump.h"
-#include "load.h"
-#include "miscellaneous.h"
-#include "shifts.h"
+#include "instructions/arithmetic.h"
+#include "instructions/bit.h"
+#include "instructions/call.h"
+#include "instructions/jump.h"
+#include "instructions/load.h"
+#include "instructions/miscellaneous.h"
+#include "instructions/shifts.h"
 
 instruction_t base_instr_list[0xFF + 1];
 instruction_t prefix_instr_list[0xFF + 1];
@@ -131,7 +131,7 @@ void init_load_list(void) {
     base_instr_list[i + 0x01] =
         (instruction_t){.instruction = ldfa, .bytes = 1, .cycles = 2};
     base_instr_list[i + 0x05] = (instruction_t){
-        .instruction = ldi, .bytes = 2, .cycles = i == 0x36 ? 3 : 2};
+        .instruction = ldi, .bytes = 2, .cycles = i == 0x31 ? 3 : 2};
     base_instr_list[i + 0x09] =
         (instruction_t){.instruction = lda, .bytes = 1, .cycles = 2};
     base_instr_list[i + 0x0d] =

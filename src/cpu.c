@@ -1,7 +1,7 @@
 #include "cpu.h"
 
 #include "flags.h"
-#include "instructions.h"
+#include "instructions/instructions.h"
 
 void init_cpu(cpu_t *cpu) {
   init_r8(&cpu->registers, cpu->r8);

@@ -6,18 +6,18 @@ set(CMAKE_C_STANDARD_REQUIRED True)
 
 set(SOURCES
   src/main.c
-  src/instructions.c
+  src/instructions/instructions.c
   src/flags.c
   src/registers.c
   src/memory.c
   src/cpu.c
-  src/arithmetic.c
-  src/miscellaneous.c
-  src/shifts.c
-  src/bit.c
-  src/jump.c
-  src/load.c
-  src/call.c
+  src/instructions/arithmetic.c
+  src/instructions/miscellaneous.c
+  src/instructions/shifts.c
+  src/instructions/bit.c
+  src/instructions/jump.c
+  src/instructions/load.c
+  src/instructions/call.c
 )
 
 add_executable(${PROJECT_NAME} ${SOURCES})
