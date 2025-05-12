@@ -19,7 +19,7 @@ void get_next_opcode(cpu_t *cpu) {
   cpu->opcode = cpu->memory.raw[cpu->registers.pc + 1];
 }
 
-void step(cpu_t *cpu) {
+void cpu_step(cpu_t *cpu) {
   get_opcode(cpu);
   uint16_t actual_pc = cpu->registers.pc;
   instruction_t instr = base_instr_list[cpu->opcode];
@@ -54,7 +54,8 @@ uint8_t get_imm8(cpu_t *cpu) {
 }
 
 uint16_t get_imm16(cpu_t *cpu) {
-  return (cpu->memory.raw[cpu->registers.pc + 2] << 8) | get_imm8(cpu);
+  return (cpu->memory.raw[cpu->registers.pc + 2] << 8) |
+         get_imm8(cpu);
 }
 
 uint16_t *get_r16(cpu_t *cpu) {
