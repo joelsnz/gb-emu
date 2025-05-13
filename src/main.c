@@ -1,6 +1,6 @@
 #include "cpu.h"
 
-#include <instructions/arithmetic.h>
+#include "instructions/arithmetic.h"
 #include <stdio.h>
 #include <stdlib.h>
 

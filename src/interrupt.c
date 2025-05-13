@@ -1,38 +1,31 @@
 #include "interrupt.h"
 
-void handle_interrupts(cpu_t *cpu) {
-  if(cpu->ime) {
-    cpu->ime = 0;
+#include <stdint.h>
 
-    uint8_t *ie = &cpu->memory.ie;
-    uint8_t *if = &cpu->memory.if;
-    uint8_t pending_interrupts = *ie & *if;
+void push_pc(cpu_t *cpu) {
+  uint16_t *sp = &cpu->registers.sp;
+  uint16_t *pc = &cpu->registers.pc;
 
-    if(!pending_interrupts) return;
+  cpu->memory.raw[--(*sp)] = (*pc >> 8) & 0xFF;
+  cpu->memory.raw[--(*sp)] = (*pc) & 0xFF;
+}
 
-    if(pending_interrupts & VBLANK) {
-      *if &= ~VBLANK;
-      handle_vblank();
-    }
+void handle_interrupt(cpu_t *cpu) {
+  uint8_t *ie = &cpu->memory.ie;
+  uint8_t *if = &cpu->memory.if;
+  uint8_t pending_interrupts = *ie & *if;
 
-    if(pending_interrupts & LCD) {
-      *if &= ~LCD;
-      handle_lcd();
-    }
+  for(int i = 0; i <= 4 && cpu->ime; i++) {
+    if(pending_interrupts & (1 << i)) {
+      cpu->ime = 0;
+      *if &= ~(1 << i);
 
-    if(pending_interrupts & TIMER) {
-      *if &= ~TIMER;
-      handle_timer();
-    }
+      push_pc(cpu);
 
-    if(pending_interrupts & SERIAL) {
-      *if &= ~SERIAL;
-      handle_serial();
-    }
+      *pc = 0x40 + (0x08 * i);
+      cpu->cycles += 5;
 
-    if(pending_interrupts & JOYPAD) {
-      *if &= ~JOYPAD;
-      handle_joypad();
+      break; // only one interrupt per cycle
     }
   }
 }

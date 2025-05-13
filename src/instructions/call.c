@@ -1,6 +1,6 @@
 #include "instructions/call.h"
 
-#include "miscellaneous.h"
+#include "instructions/miscellaneous.h"
 
 void call(cpu_t *cpu) {
   uint16_t *sp = &cpu->registers.sp;

@@ -4,6 +4,7 @@
 #include "instructions/instructions.h"
 
 void init_cpu(cpu_t *cpu) {
+  cpu->cycles = 0;
   init_r8(&cpu->registers, cpu->r8);
   init_r16(&cpu->registers, cpu->r16);
   init_r16mem(&cpu->registers, cpu->r16mem);
@@ -15,22 +16,21 @@ void get_opcode(cpu_t *cpu) {
   cpu->opcode = cpu->memory.raw[cpu->registers.pc];
 }
 
-void get_next_opcode(cpu_t *cpu) {
-  cpu->opcode = cpu->memory.raw[cpu->registers.pc + 1];
-}
-
 void cpu_step(cpu_t *cpu) {
   get_opcode(cpu);
   uint16_t actual_pc = cpu->registers.pc;
   instruction_t instr = base_instr_list[cpu->opcode];
+  
   if(cpu->opcode == 0xcb) { // prefixed instruction
-    get_next_opcode(cpu);
-    instr = prefix_instr_list[cpu->opcode];
+    instr = prefix_instr_list[++cpu->opcode];
   }
   instr.instruction(cpu);
+
   if(actual_pc ==
      cpu->registers.pc) // keep pc if some instr already modified it
     cpu->registers.pc += instr.bytes;
+
+  cpu->cycles += instr.cycles;
 }
 
 uint8_t *get_lower_r8(cpu_t *cpu) {

@@ -14,11 +14,11 @@ typedef struct {
   uint8_t ime;
 	memory_t memory;
 	uint8_t opcode;
+  uint64_t cycles;
 } cpu_t;
 
 void init_cpu(cpu_t *cpu);
 void get_opcode(cpu_t *cpu);
-void get_next_opcode(cpu_t *cpu);
 void cpu_step(cpu_t *cpu);
 
 uint8_t *get_lower_r8(cpu_t *cpu);
