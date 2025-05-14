@@ -18,6 +18,8 @@ set(SOURCES
   src/instructions/jump.c
   src/instructions/load.c
   src/instructions/call.c
+  src/interrupt.c
+  src/rom.c
 )
 
 add_executable(${PROJECT_NAME} ${SOURCES})

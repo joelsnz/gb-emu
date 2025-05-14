@@ -1,25 +1,15 @@
 #include "cpu.h"
 
-#include "instructions/arithmetic.h"
-#include <stdio.h>
+#include "rom.h"
 #include <stdlib.h>
 
-int main(void) {
+int main(int argc, char **argv) {
   cpu_t *cpu = malloc(sizeof(cpu_t));
   init_cpu(cpu);
-  cpu->memory.raw[0] = 0xc3;
-  cpu->memory.raw[1] = 0x20;
-  cpu->memory.raw[2] = 0x00;
-  cpu->registers.pc = 0x0;
-  cpu->registers.a = 0x0;
+  load_rom(cpu, argv[1]);
+  boot_sequence(cpu);
 
-  printf("a: %d\tb: %d\tpc: %d\n", cpu->registers.a, cpu->registers.b,
-         cpu->registers.pc);
-
-  cpu_step(cpu);
-
-  printf("a: %d\tb: %d\tpc: %d\n", cpu->registers.a, cpu->registers.b,
-         cpu->registers.pc);
+  for (int i = 0; i < 8000; i++) cpu_step(cpu);
 
   return 0;
 }

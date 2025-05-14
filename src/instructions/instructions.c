@@ -225,27 +225,27 @@ void init_shifts_list(void) {
       (instruction_t){.instruction = rra, .bytes = 1, .cycles = 1};
 
   for(int i = 0x00; i <= 0x07; i++) {
-    base_instr_list[i] =
+    prefix_instr_list[i] =
         (instruction_t){.instruction = rlc,
                         .bytes = 2,
                         .cycles = (i & 0x06) == 0x06 ? 4 : 2};
-    base_instr_list[i + 0x08] =
+    prefix_instr_list[i + 0x08] =
         (instruction_t){.instruction = rrc,
                         .bytes = 2,
                         .cycles = (i & 0x06) == 0x06 ? 4 : 2};
-    base_instr_list[i + 0x10] =
+    prefix_instr_list[i + 0x10] =
         (instruction_t){.instruction = rl,
                         .bytes = 2,
                         .cycles = (i & 0x06) == 0x06 ? 4 : 2};
-    base_instr_list[i + 0x18] =
+    prefix_instr_list[i + 0x18] =
         (instruction_t){.instruction = rr,
                         .bytes = 2,
                         .cycles = (i & 0x06) == 0x06 ? 4 : 2};
-    base_instr_list[i + 0x20] =
+    prefix_instr_list[i + 0x20] =
         (instruction_t){.instruction = sla,
                         .bytes = 2,
                         .cycles = (i & 0x06) == 0x06 ? 4 : 2};
-    base_instr_list[i + 0x28] =
+    prefix_instr_list[i + 0x28] =
         (instruction_t){.instruction = sra,
                         .bytes = 2,
                         .cycles = (i & 0x06) == 0x06 ? 4 : 2};
