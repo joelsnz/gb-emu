@@ -23,7 +23,7 @@ void lda(cpu_t *cpu) {
 }
 
 void ldfa(cpu_t *cpu) {
-  uint8_t dest = *get_r16mem(cpu);
+  uint16_t dest = *get_r16mem(cpu);
 
   cpu->memory.raw[dest] = cpu->registers.a;
 }

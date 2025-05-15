@@ -141,7 +141,7 @@ void init_load_list(void) {
   base_instr_list[0x08] =
       (instruction_t){.instruction = ldsp, .bytes = 3, .cycles = 5};
 
-  for(int i = 0x04; i <= 0x7f; i++) {
+  for(int i = 0x40; i <= 0x7f; i++) {
     if(i == 0x76) continue;  // halt
     uint8_t is_indirect = 0; // hl register is involved
     if((i & 0x06) == 0x06 || (i & 0xf8) == 0x70) is_indirect = 1;
