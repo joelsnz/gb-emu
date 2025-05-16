@@ -10,7 +10,7 @@ int main(int argc, char **argv) {
   load_rom(cpu, rom /*argv[1]*/);
   boot_sequence(cpu);
 
-  for (int i = 0; i < 8000; i++) cpu_step(cpu);
+  while (1) cpu_step(cpu);
 
   return 0;
 }

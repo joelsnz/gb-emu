@@ -1,5 +1,7 @@
 #include "instructions/arithmetic.h"
 
+#include <sys/types.h>
+
 #include "flags.h"
 
 // 8-bit ALU
@@ -163,23 +165,25 @@ void cp(cpu_t *cpu) {
 
 void inc(cpu_t *cpu) {
   uint8_t *reg = get_middle_r8(cpu);
+	uint8_t result = *reg + 1;
 
-  if(*reg) CLEAR_FLAG(cpu, ZERO_FLAG);
+  if(result) CLEAR_FLAG(cpu, ZERO_FLAG);
   else SET_FLAG(cpu, ZERO_FLAG);
 
   CLEAR_FLAG(cpu, NEGATIVE_FLAG);
 
-  const uint8_t half_carry = (*reg & 0x0F) == 0x0F;
-  if(half_carry) SET_FLAG(cpu, CARRY_FLAG);
-  else CLEAR_FLAG(cpu, CARRY_FLAG);
+  const uint8_t half_carry = (*reg & 0x0F) + 1 > 0x0F;
+  if(half_carry) SET_FLAG(cpu, HALFCARRY_FLAG);
+  else CLEAR_FLAG(cpu, HALFCARRY_FLAG);
 
-  *reg += 1;
+  *reg = result;
 }
 
 void dec(cpu_t *cpu) {
   uint8_t *reg = get_middle_r8(cpu);
+	uint8_t result = *reg - 1;
 
-  if(*reg) CLEAR_FLAG(cpu, ZERO_FLAG);
+  if(result) CLEAR_FLAG(cpu, ZERO_FLAG);
   else SET_FLAG(cpu, ZERO_FLAG);
 
   SET_FLAG(cpu, NEGATIVE_FLAG);
@@ -188,7 +192,7 @@ void dec(cpu_t *cpu) {
   if(half_carry) SET_FLAG(cpu, HALFCARRY_FLAG);
   else CLEAR_FLAG(cpu, HALFCARRY_FLAG);
 
-  *reg -= 1;
+  *reg = result;
 }
 
 // 16-bit arithmetic

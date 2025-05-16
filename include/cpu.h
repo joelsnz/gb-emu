@@ -26,7 +26,8 @@ uint8_t *get_middle_r8(cpu_t *cpu);
 uint8_t get_imm8(cpu_t *cpu);
 uint16_t get_imm16(cpu_t *cpu);
 uint16_t *get_r16(cpu_t *cpu);
-uint16_t *get_r16mem(cpu_t *cpu);
+
+uint16_t get_r16mem(cpu_t *cpu);
 uint16_t *get_r16stk(cpu_t *cpu);
 uint8_t get_tgt3(cpu_t *cpu);
 uint8_t get_b3(cpu_t *cpu);
