@@ -9,7 +9,7 @@ void boot_sequence(cpu_t *cpu) {
 	cpu->registers.de = 0x00D8;
 	cpu->registers.hl = 0x014D;
 	cpu->registers.sp = 0xFFFE;
-	cpu->registers.pc = 0x0100;
+	cpu->registers.pc = 0x0;
 
 	cpu->memory.raw[0xFF50] = 0;
 }

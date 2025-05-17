@@ -26,6 +26,10 @@ void init_arithmetic_list(void) {
     base_instr_list[i] = (instruction_t){
         .bytes = 1, .cycles = (i & 0x06) == 0x06 ? 2 : 1};
 
+
+  for(int i = 0xc6; i <= 0xfe; i += 0x08)
+    base_instr_list[i] = (instruction_t){.bytes = 2, .cycles = 2};
+
   base_instr_list[0xc6].instruction = add;
   base_instr_list[0xd6].instruction = sub;
   base_instr_list[0xe6].instruction = and_;
@@ -34,8 +38,6 @@ void init_arithmetic_list(void) {
   base_instr_list[0xde].instruction = sbc;
   base_instr_list[0xee].instruction = xor_;
   base_instr_list[0xfe].instruction = cp;
-  for(int i = 0xc6; i <= 0xfe; i += 0x08)
-    base_instr_list[i] = (instruction_t){.bytes = 2, .cycles = 2};
 
   base_instr_list[0xe8] =
       (instruction_t){.instruction = add, .bytes = 2, .cycles = 4};
