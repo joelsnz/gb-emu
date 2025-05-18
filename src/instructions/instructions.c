@@ -12,7 +12,12 @@ instruction_t base_instr_list[0xFF + 1];
 instruction_t prefix_instr_list[0xFF + 1];
 
 void init_arithmetic_list(void) {
-  for(int i = 0x80; i <= 0x88; i++) {
+
+  for(int i = 0x80; i <= 0xbf; i++)
+    base_instr_list[i] = (instruction_t){
+        .bytes = 1, .cycles = (i & 0x06) == 0x06 ? 2 : 1};
+
+    for(int i = 0x80; i <= 0x88; i++) {
     base_instr_list[i].instruction = add;
     base_instr_list[i + 0x08].instruction = adc;
     base_instr_list[i + 0x10].instruction = sub;
@@ -22,10 +27,6 @@ void init_arithmetic_list(void) {
     base_instr_list[i + 0x30].instruction = or_;
     base_instr_list[i + 0x38].instruction = cp;
   }
-  for(int i = 0x80; i <= 0xbf; i++)
-    base_instr_list[i] = (instruction_t){
-        .bytes = 1, .cycles = (i & 0x06) == 0x06 ? 2 : 1};
-
 
   for(int i = 0xc6; i <= 0xfe; i += 0x08)
     base_instr_list[i] = (instruction_t){.bytes = 2, .cycles = 2};
@@ -44,7 +45,7 @@ void init_arithmetic_list(void) {
 
   for(int i = 0x03; i <= 0x3d; i += 0x08) {
     base_instr_list[i] =
-        (instruction_t){.instruction = (i & 0x80) ? dec : inc,
+        (instruction_t){.instruction = (i & 0x80) ? dec16 : inc16,
                         .bytes = 1,
                         .cycles = 2};
     base_instr_list[i + 1] = (instruction_t){
