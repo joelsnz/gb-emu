@@ -26,6 +26,7 @@ set(SOURCES
   src/interrupt.c
   src/rom.c
   src/video.c
+  src/ppu.c
 )
 
 add_executable(${PROJECT_NAME} ${SOURCES})
