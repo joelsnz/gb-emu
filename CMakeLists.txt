@@ -25,7 +25,7 @@ set(SOURCES
   src/instructions/call.c
   src/interrupt.c
   src/rom.c
-  src/video.c
+  src/lcd.c
   src/ppu.c
 )
 

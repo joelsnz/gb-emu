@@ -1,17 +1,20 @@
 #include "cpu.h"
+#include "lcd.h"
 #include "rom.h"
-#include "video.h"
 
+#include <SDL3/SDL.h>
+#include <SDL3/SDL_main.h>
 #include <stdlib.h>
 
 int main(int argc, char **argv) {
-  cpu_t *cpu = malloc(sizeof(cpu_t));
-  init_cpu(cpu);
-  init_video();
-  // load_rom(cpu, rom argv[1]);
-  boot_sequence(cpu);
+  if(lcd_init() < 0) return 0;
 
-  while(video_step()) {}
+  SDL_Event event;
+  uint8_t running = 1;
+  while(running) {
+    // cpu_step();
+    running = lcd_step();
+  }
 
   return 0;
 }
