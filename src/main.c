@@ -7,7 +7,10 @@
 #include <stdlib.h>
 
 int main(int argc, char **argv) {
-  if(lcd_init() < 0) return 0;
+  cpu_t cpu;
+  lcd_t lcd;
+  init_cpu(&cpu);
+  if(lcd_init(&lcd, &cpu) < 0) return 0;
 
   SDL_Event event;
   uint8_t running = 1;

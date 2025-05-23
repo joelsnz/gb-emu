@@ -1,6 +1,7 @@
 #include "cpu.h"
 
 #include "flags.h"
+#include "mmu.h"
 #include "instructions/instructions.h"
 
 void init_cpu(cpu_t *cpu) {
@@ -12,12 +13,15 @@ void init_cpu(cpu_t *cpu) {
   init_instr_list(cpu);
 }
 
-void get_opcode(cpu_t *cpu) {
-  cpu->opcode = cpu->memory.raw[cpu->registers.pc];
+void get_opcode(const emu_t *emu) {
+  cpu_t *cpu = emu->cpu;
+  mmu_t *mmu = emu->mmu;
+  cpu->opcode = mmu->raw[cpu->registers.pc];
 }
 
-void cpu_step(cpu_t *cpu) {
-  get_opcode(cpu);
+void cpu_step(const emu_t *emu) {
+  cpu_t *cpu = emu->cpu;
+  get_opcode(emu);
   uint16_t actual_pc = cpu->registers.pc;
   instruction_t instr = base_instr_list[cpu->opcode];
   
@@ -33,32 +37,40 @@ void cpu_step(cpu_t *cpu) {
   cpu->cycles += instr.cycles;
 }
 
-uint8_t *get_lower_r8(cpu_t *cpu) {
+uint8_t *get_lower_r8(const emu_t *emu) {
+  cpu_t *cpu = emu->cpu;
+  mmu_t *mmu = emu->mmu;
   const uint8_t reg = cpu->opcode & 0x07;
 
   return reg == 0x06 // r8 value
-             ? &cpu->memory.raw[cpu->registers.hl]
+             ? &mmu->raw[cpu->registers.hl]
              : cpu->r8[reg];
 }
 
-uint8_t *get_middle_r8(cpu_t *cpu) {
+uint8_t *get_middle_r8(const emu_t *emu) {
+  cpu_t *cpu = emu->cpu;
+  mmu_t *mmu = emu->mmu;
   const uint8_t reg = (cpu->opcode & 0x38) >> 3;
 
   return reg == 0x06 // r8 value
-             ? &cpu->memory.raw[cpu->registers.hl]
+             ? &mmu->raw[cpu->registers.hl]
              : cpu->r8[reg];
 }
 
-uint8_t get_imm8(cpu_t *cpu) {
-  return cpu->memory.raw[cpu->registers.pc + 1];
+uint8_t get_imm8(const emu_t *emu) {
+  cpu_t *cpu = emu->cpu;
+  mmu_t *mmu = emu->mmu;
+  return mmu->raw[cpu->registers.pc + 1];
 }
 
-uint16_t get_imm16(cpu_t *cpu) {
-  return (cpu->memory.raw[cpu->registers.pc + 2] << 8) |
-         get_imm8(cpu);
+uint16_t get_imm16(const emu_t *emu) {
+  cpu_t *cpu = emu->cpu;
+  mmu_t *mmu = emu->mmu;
+  return (mmu->raw[cpu->registers.pc + 2] << 8) |
+         get_imm8(emu);
 }
 
-uint16_t *get_r16(cpu_t *cpu) {
+uint16_t *get_r16(const cpu_t *cpu) {
   const uint16_t reg = (cpu->opcode & 0x30) >> 4;
   return cpu->r16[reg];
 }
@@ -71,19 +83,21 @@ uint16_t get_r16mem(cpu_t *cpu) {
   return reg;
 }
 
-uint16_t *get_r16stk(cpu_t *cpu) {
+uint16_t *get_r16stk(const cpu_t *cpu) {
   const uint16_t reg = (cpu->opcode & 0x30) >> 4;
   return cpu->r16stk[reg];
 }
 
-uint8_t get_tgt3(cpu_t *cpu) {
+uint8_t get_tgt3(const cpu_t *cpu) {
   const uint8_t target = (cpu->opcode & 0x38) >> 3;
   return target * 0x08;
 }
 
-uint8_t get_b3(cpu_t *cpu) { return (cpu->opcode & 0x38) >> 3; }
+uint8_t get_b3(const cpu_t *cpu) {
+  return (cpu->opcode & 0x38) >> 3;
+}
 
-uint8_t get_cond(cpu_t *cpu) {
+uint8_t get_cond(const cpu_t *cpu) {
   enum conditions_t { nz, z, nc, c };
 
   enum conditions_t cond =

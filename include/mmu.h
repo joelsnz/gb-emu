@@ -1,11 +1,13 @@
-#ifndef MEMORY_H
-#define MEMORY_H
+#ifndef MMU_H
+#define MMU_H
 
 #define MEMORY_SIZE 0x10000 // 64kb
 
 #include <stdint.h>
 
-typedef union {
+#include "emulator.h"
+
+typedef union mmu_t {
   uint8_t raw[MEMORY_SIZE];
   struct {
     uint8_t rom[0x8000];
@@ -18,6 +20,6 @@ typedef union {
     uint8_t ie;
     uint8_t if_;   
   };
-} memory_t;
+} mmu_t;
 
-#endif // MEMORY_H
+#endif // MMU_H

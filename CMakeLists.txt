@@ -14,7 +14,6 @@ set(SOURCES
   src/instructions/instructions.c
   src/flags.c
   src/registers.c
-  src/memory.c
   src/cpu.c
   src/instructions/arithmetic.c
   src/instructions/miscellaneous.c
