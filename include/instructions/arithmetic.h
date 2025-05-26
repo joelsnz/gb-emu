@@ -1,24 +1,24 @@
 #ifndef ARITHMETIC_H
 #define ARITHMETIC_H
 
-#include "cpu.h"
+#include "emulator.h"
 
 // 8-bit arithmetic
-void add(cpu_t *cpu);
-void adc(cpu_t *cpu);
-void sub(cpu_t *cpu);
-void sbc(cpu_t *cpu);
-void and_(cpu_t *cpu);
-void or_(cpu_t *cpu);
-void xor_(cpu_t *cpu);
-void cp(cpu_t *cpu);
-void inc(cpu_t *cpu);
-void dec(cpu_t *cpu);
+void add(emu_t *emu);
+void adc(emu_t *emu);
+void sub(emu_t *emu);
+void sbc(emu_t *emu);
+void and_(emu_t *emu);
+void or_(emu_t *emu);
+void xor_(emu_t *emu);
+void cp(emu_t *emu);
+void inc(emu_t *emu);
+void dec(emu_t *emu);
 
 // 16-bit arithmetic
-void addhl(cpu_t *cpu);
-void addsp(cpu_t *cpu);
-void inc16(cpu_t *cpu);
-void dec16(cpu_t *cpu);
+void addhl(emu_t *emu);
+void addsp(emu_t *emu);
+void inc16(emu_t *emu);
+void dec16(emu_t *emu);
 
 #endif //ARITHMETIC_H

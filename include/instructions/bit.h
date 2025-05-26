@@ -1,10 +1,10 @@
 #ifndef BIT_H
 #define BIT_H
 
-#include "cpu.h"
+#include "emulator.h"
 
-void bit(cpu_t *cpu);
-void set(cpu_t *cpu);
-void res(cpu_t *cpu);
+void bit(emu_t *emu);
+void set(emu_t *emu);
+void res(emu_t *emu);
 
 #endif //BIT_H

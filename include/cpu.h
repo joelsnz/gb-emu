@@ -7,11 +7,11 @@
 #include "emulator.h"
 
 typedef struct cpu_t {
-	registers_t registers;
+  registers_t registers;
 	uint8_t *r8[8];
 	uint16_t *r16[4];
 	uint16_t *r16mem[4];
-  uint16_t *r16stk[4];
+	uint16_t *r16stk[4];
   uint8_t ime;
 	uint8_t opcode;
   uint64_t cycles;

@@ -1,15 +1,15 @@
 #ifndef CALL_H
 #define CALL_H
 
-#include "cpu.h"
+#include "emulator.h"
 
-void call(cpu_t *cpu);
-void callc(cpu_t *cpu);
+void call(emu_t *emu);
+void callc(emu_t *emu);
 
-void rst(cpu_t *cpu);
+void rst(emu_t *emu);
 
-void ret(cpu_t *cpu);
-void retc(cpu_t *cpu);
-void reti(cpu_t *cpu);
+void ret(emu_t *emu);
+void retc(emu_t *emu);
+void reti(emu_t *emu);
 
 #endif // CALL_H

@@ -7,6 +7,7 @@
 #include "instructions/load.h"
 #include "instructions/miscellaneous.h"
 #include "instructions/shifts.h"
+#include "cpu.h"
 
 instruction_t base_instr_list[0xFF + 1];
 instruction_t prefix_instr_list[0xFF + 1];
@@ -17,7 +18,7 @@ void init_arithmetic_list(void) {
     base_instr_list[i] = (instruction_t){
         .bytes = 1, .cycles = (i & 0x06) == 0x06 ? 2 : 1};
 
-    for(int i = 0x80; i <= 0x88; i++) {
+  for(int i = 0x80; i <= 0x88; i++) {
     base_instr_list[i].instruction = add;
     base_instr_list[i + 0x08].instruction = adc;
     base_instr_list[i + 0x10].instruction = sub;

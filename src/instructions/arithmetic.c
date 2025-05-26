@@ -1,13 +1,15 @@
 #include "instructions/arithmetic.h"
 
-#include <sys/types.h>
+#include <stdint.h>
 
 #include "flags.h"
+#include "cpu.h"
 
 // 8-bit ALU
-void add(cpu_t *cpu) {
-  uint8_t value =
-      cpu->opcode & 0x40 ? get_imm8(cpu) : *get_lower_r8(cpu);
+void add(const emu_t *emu) {
+  cpu_t *cpu = emu->cpu;
+  const uint8_t value =
+      cpu->opcode & 0x40 ? get_imm8(emu) : *get_lower_r8(emu);
 
   const uint16_t result = cpu->registers.a + value;
 
@@ -27,9 +29,10 @@ void add(cpu_t *cpu) {
   cpu->registers.a = (uint8_t)result;
 }
 
-void adc(cpu_t *cpu) {
-  uint8_t value =
-      cpu->opcode & 0x40 ? get_imm8(cpu) : *get_lower_r8(cpu);
+void adc(const emu_t *emu) {
+  cpu_t *cpu = emu->cpu;
+  const uint8_t value =
+      cpu->opcode & 0x40 ? get_imm8(emu) : *get_lower_r8(emu);
 
   const uint16_t result =
       cpu->registers.a + value + ISSET_FLAG(cpu, CARRY_FLAG);
@@ -52,9 +55,10 @@ void adc(cpu_t *cpu) {
   cpu->registers.a = (uint8_t)result;
 }
 
-void sub(cpu_t *cpu) {
-  uint8_t value =
-      cpu->opcode & 0x40 ? get_imm8(cpu) : *get_lower_r8(cpu);
+void sub(const emu_t *emu) {
+  cpu_t *cpu = emu->cpu;
+  const uint8_t value =
+      cpu->opcode & 0x40 ? get_imm8(emu) : *get_lower_r8(emu);
 
   const uint16_t result = cpu->registers.a - value;
 
@@ -74,9 +78,10 @@ void sub(cpu_t *cpu) {
   cpu->registers.a = (uint8_t)result;
 }
 
-void sbc(cpu_t *cpu) {
-  uint8_t value =
-      cpu->opcode & 0x40 ? get_imm8(cpu) : *get_lower_r8(cpu);
+void sbc(const emu_t *emu) {
+  cpu_t *cpu = emu->cpu;
+  const uint8_t value =
+      cpu->opcode & 0x40 ? get_imm8(emu) : *get_lower_r8(emu);
 
   const uint16_t result =
       cpu->registers.a - value - ISSET_FLAG(cpu, CARRY_FLAG);
@@ -99,9 +104,10 @@ void sbc(cpu_t *cpu) {
   cpu->registers.a = (uint8_t)result;
 }
 
-void and_(cpu_t *cpu) {
-  uint8_t value =
-      cpu->opcode & 0x40 ? get_imm8(cpu) : *get_lower_r8(cpu);
+void and_(const emu_t *emu) {
+  cpu_t *cpu = emu->cpu;
+  const uint8_t value =
+      cpu->opcode & 0x40 ? get_imm8(emu) : *get_lower_r8(emu);
 
   const uint8_t result = cpu->registers.a & value;
 
@@ -115,9 +121,10 @@ void and_(cpu_t *cpu) {
   cpu->registers.a = (uint8_t)result;
 }
 
-void or_(cpu_t *cpu) {
-  uint8_t value =
-      cpu->opcode & 0x40 ? get_imm8(cpu) : *get_lower_r8(cpu);
+void or_(const emu_t *emu) {
+  cpu_t *cpu = emu->cpu;
+  const uint8_t value =
+      cpu->opcode & 0x40 ? get_imm8(emu) : *get_lower_r8(emu);
 
   const uint8_t result = cpu->registers.a | value;
 
@@ -129,9 +136,10 @@ void or_(cpu_t *cpu) {
   cpu->registers.a = (uint8_t)result;
 }
 
-void xor_(cpu_t *cpu) {
-  uint8_t value =
-      cpu->opcode & 0x40 ? get_imm8(cpu) : *get_lower_r8(cpu);
+void xor_(const emu_t *emu) {
+  cpu_t *cpu = emu->cpu;
+  const uint8_t value =
+      cpu->opcode & 0x40 ? get_imm8(emu) : *get_lower_r8(emu);
 
   const uint8_t result = cpu->registers.a ^ value;
 
@@ -143,9 +151,10 @@ void xor_(cpu_t *cpu) {
   cpu->registers.a = (uint8_t)result;
 }
 
-void cp(cpu_t *cpu) {
-  uint8_t value =
-      cpu->opcode & 0x40 ? get_imm8(cpu) : *get_lower_r8(cpu);
+void cp(const emu_t *emu) {
+  cpu_t *cpu = emu->cpu;
+  const uint8_t value =
+      cpu->opcode & 0x40 ? get_imm8(emu) : *get_lower_r8(emu);
 
   const uint16_t result = cpu->registers.a - value;
 
@@ -163,9 +172,10 @@ void cp(cpu_t *cpu) {
   else CLEAR_FLAG(cpu, CARRY_FLAG);
 }
 
-void inc(cpu_t *cpu) {
-  uint8_t *reg = get_middle_r8(cpu);
-	uint8_t result = *reg + 1;
+void inc(const emu_t *emu) {
+  cpu_t *cpu = emu->cpu;
+  uint8_t *reg = get_middle_r8(emu);
+	const uint8_t result = *reg + 1;
 
   if(result) CLEAR_FLAG(cpu, ZERO_FLAG);
   else SET_FLAG(cpu, ZERO_FLAG);
@@ -179,9 +189,10 @@ void inc(cpu_t *cpu) {
   *reg = result;
 }
 
-void dec(cpu_t *cpu) {
-  uint8_t *reg = get_middle_r8(cpu);
-	uint8_t result = *reg - 1;
+void dec(const emu_t *emu) {
+  cpu_t *cpu = emu->cpu;
+  uint8_t *reg = get_middle_r8(emu);
+	const uint8_t result = *reg - 1;
 
   if(result) CLEAR_FLAG(cpu, ZERO_FLAG);
   else SET_FLAG(cpu, ZERO_FLAG);
@@ -196,7 +207,8 @@ void dec(cpu_t *cpu) {
 }
 
 // 16-bit arithmetic
-void addhl(cpu_t *cpu) {
+void addhl(const emu_t *emu) {
+  cpu_t *cpu = emu->cpu;
   const uint16_t value  = *get_r16(cpu);
   const uint32_t result = cpu->registers.hl + value;
 
@@ -213,8 +225,9 @@ void addhl(cpu_t *cpu) {
   cpu->registers.hl = result;
 }
 
-void addsp(cpu_t *cpu) {
-  const uint8_t value   = get_imm8(cpu);
+void addsp(const emu_t *emu) {
+  cpu_t *cpu = emu->cpu;
+  const uint8_t value   = get_imm8(emu);
   const uint32_t result = cpu->registers.sp + value;
 
   CLEAR_FLAG(cpu, ZERO_FLAG | NEGATIVE_FLAG);
@@ -230,6 +243,6 @@ void addsp(cpu_t *cpu) {
   cpu->registers.sp = result;
 }
 
-void inc16(cpu_t *cpu) { (*get_r16(cpu))++; }
+void inc16(const emu_t *emu) { (*get_r16(emu->cpu))++; }
 
-void dec16(cpu_t *cpu) { (*get_r16(cpu))--; }
+void dec16(const emu_t *emu) { (*get_r16(emu->cpu))--; }

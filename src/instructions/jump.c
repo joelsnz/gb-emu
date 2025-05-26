@@ -1,14 +1,28 @@
 #include "instructions/jump.h"
 
-void jp(cpu_t *cpu) { cpu->registers.pc = get_imm16(cpu); }
+#include "cpu.h"
 
-void jpc(cpu_t *cpu) {
-  if(get_cond(cpu)) jp(cpu);
+void jp(const emu_t *emu) {
+  cpu_t *cpu = emu->cpu;
+  cpu->registers.pc = get_imm16(emu);
 }
-void jphl(cpu_t *cpu) { cpu->registers.pc = cpu->registers.hl; }
 
-void jr(cpu_t *cpu) { cpu->registers.pc += ((int8_t)get_imm8(cpu) + 2); }
+void jpc(const emu_t *emu) {
+  const cpu_t *cpu = emu->cpu;
+  if(get_cond(cpu)) jp(emu);
+}
 
-void jrc(cpu_t *cpu) {
-  if(get_cond(cpu)) jr(cpu);
+void jphl(const emu_t *emu) {
+  registers_t *registers = &emu->cpu->registers;
+  registers->pc = registers->hl;
+}
+
+void jr(const emu_t *emu) {
+  cpu_t *cpu = emu->cpu;
+  cpu->registers.pc += ((int8_t)get_imm8(emu) + 2);
+}
+
+void jrc(const emu_t *emu) {
+  const cpu_t *cpu = emu->cpu;
+  if(get_cond(cpu)) jr(emu);
 }

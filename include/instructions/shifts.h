@@ -1,18 +1,18 @@
 #ifndef SHIFTS_H
 #define SHIFTS_H
 
-#include "cpu.h"
+#include "emulator.h"
 
-void rlca(cpu_t *cpu);
-void rla(cpu_t *cpu);
-void rrca(cpu_t *cpu);
-void rra(cpu_t *cpu);
-void rlc(cpu_t *cpu);
-void rl(cpu_t *cpu);
-void rrc(cpu_t *cpu);
-void rr(cpu_t *cpu);
-void sla(cpu_t *cpu);
-void sra(cpu_t *cpu);
-void srl(cpu_t *cpu);
+void rlca(emu_t *emu);
+void rla(emu_t *emu);
+void rrca(emu_t *emu);
+void rra(emu_t *emu);
+void rlc(emu_t *emu);
+void rl(emu_t *emu);
+void rrc(emu_t *emu);
+void rr(emu_t *emu);
+void sla(emu_t *emu);
+void sra(emu_t *emu);
+void srl(emu_t *emu);
 
 #endif //SHIFTS_H

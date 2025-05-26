@@ -1,89 +1,114 @@
 #include "instructions/load.h"
 
 #include "flags.h"
+#include "cpu.h"
+#include "mmu.h"
 
-void ld(cpu_t *cpu) {
-  uint8_t *dest = get_middle_r8(cpu);
-  uint8_t *source = get_lower_r8(cpu);
+void ld(const emu_t *emu) {
+  uint8_t *dest = get_middle_r8(emu);
+  const uint8_t *source = get_lower_r8(emu);
 
   *dest = *source;
 }
 
-void ldi(cpu_t *cpu) {
-  uint8_t *dest = get_middle_r8(cpu);
-  uint8_t imm = get_imm8(cpu);
+void ldi(const emu_t *emu) {
+  uint8_t *dest = get_middle_r8(emu);
+  const uint8_t imm = get_imm8(emu);
 
   *dest = imm;
 }
 
-void lda(cpu_t *cpu) {
-  uint16_t source = get_r16mem(cpu);
+void lda(const emu_t *emu) {
+  cpu_t *cpu = emu->cpu;
+  const mmu_t *mmu = emu->mmu;
+  const uint16_t source = get_r16mem(cpu);
 
-  cpu->registers.a = cpu->memory.raw[source];
+  cpu->registers.a = mmu->raw[source];
 }
 
-void ldfa(cpu_t *cpu) {
-  uint16_t dest = get_r16mem(cpu);
+void ldfa(const emu_t *emu) {
+  cpu_t *cpu = emu->cpu;
+  mmu_t *mmu = emu->mmu;
+  const uint16_t dest = get_r16mem(cpu);
 
-  cpu->memory.raw[dest] = cpu->registers.a;
+  mmu->raw[dest] = cpu->registers.a;
 }
 
-void ldad(cpu_t *cpu) {
-  uint16_t addr = get_imm16(cpu);
+void ldad(const emu_t *emu) {
+  cpu_t *cpu = emu->cpu;
+  const mmu_t *mmu = emu->mmu;
+  const uint16_t addr = get_imm16(emu);
 
-  cpu->registers.a = cpu->memory.raw[addr];
+  cpu->registers.a = mmu->raw[addr];
 }
 
-void ldfad(cpu_t *cpu) {
-  uint16_t addr = get_imm16(cpu);
+void ldfad(const emu_t *emu) {
+  const cpu_t *cpu = emu->cpu;
+  mmu_t *mmu = emu->mmu;
+  const uint16_t addr = get_imm16(emu);
 
-  cpu->memory.raw[addr] = cpu->registers.a;
+  mmu->raw[addr] = cpu->registers.a;
 }
 
-void ldh(cpu_t *cpu) {
-  uint16_t addr = cpu->registers.c + 0xff00;
+void ldh(const emu_t *emu) {
+  cpu_t *cpu = emu->cpu;
+  const mmu_t *mmu = emu->mmu;
+  const uint16_t addr = cpu->registers.c + 0xff00;
 
-  cpu->registers.a = cpu->memory.raw[addr];
+  cpu->registers.a = mmu->raw[addr];
 }
 
-void ldhf(cpu_t *cpu) {
-  uint16_t addr = cpu->registers.c + 0xff00;
+void ldhf(const emu_t *emu) {
+  const cpu_t *cpu = emu->cpu;
+  mmu_t *mmu = emu->mmu;
+  const uint16_t addr = cpu->registers.c + 0xff00;
 
-  cpu->memory.raw[addr] = cpu->registers.a;
+  mmu->raw[addr] = cpu->registers.a;
 }
 
-void ldhi(cpu_t *cpu) {
-  uint8_t imm = get_imm8(cpu);
-  uint16_t addr = imm + 0xff00;
+void ldhi(const emu_t *emu) {
+  cpu_t *cpu = emu->cpu;
+  const mmu_t *mmu = emu->mmu;
+  const uint8_t imm = get_imm8(emu);
+  const uint16_t addr = imm + 0xff00;
 
-  cpu->registers.a = cpu->memory.raw[addr];
+  cpu->registers.a = mmu->raw[addr];
 }
 
-void ldhfi(cpu_t *cpu) {
-  uint8_t imm = get_imm8(cpu);
-  uint16_t addr = imm + 0xff00;
+void ldhfi(const emu_t *emu) {
+  const cpu_t *cpu = emu->cpu;
+  mmu_t *mmu = emu->mmu;
+  const uint8_t imm = get_imm8(emu);
+  const uint16_t addr = imm + 0xff00;
 
-  cpu->memory.raw[addr] = cpu->registers.a;
+  mmu->raw[addr] = cpu->registers.a;
 }
 
-void ldi16(cpu_t *cpu) {
+void ldi16(const emu_t *emu) {
+  const cpu_t *cpu = emu->cpu;
   uint16_t *dest = get_r16(cpu);
-  uint16_t imm = get_imm16(cpu);
+  const uint16_t imm = get_imm16(emu);
 
   *dest = imm;
 }
 
-void ldsp(cpu_t *cpu) {
-  uint16_t addr = get_imm16(cpu);
+void ldsp(const emu_t *emu) {
+  const cpu_t *cpu = emu->cpu;
+  mmu_t *mmu = emu->mmu;
+  const uint16_t addr = get_imm16(emu);
 
-  cpu->memory.raw[addr] = cpu->registers.sp;
+  mmu->raw[addr] = cpu->registers.sp;
 }
 
-void ldsphl(cpu_t *cpu) { cpu->registers.sp = cpu->registers.hl; }
+void ldsphl(const emu_t *emu) {
+  registers_t *registers = &emu->cpu->registers;
+  registers->sp = registers->hl;
+}
 
-void ldhlsp(cpu_t *cpu) {
-  uint8_t imm = get_imm8(cpu);
-  uint16_t result = cpu->registers.sp + imm;
+void ldhlsp(const emu_t *emu) {
+  cpu_t *cpu = emu->cpu;
+  const uint8_t imm = get_imm8(emu);
+  const uint16_t result = cpu->registers.sp + imm;
 
   CLEAR_FLAG(cpu, ZERO_FLAG | NEGATIVE_FLAG);
 
@@ -98,20 +123,24 @@ void ldhlsp(cpu_t *cpu) {
   cpu->registers.hl = result;
 }
 
-void push(cpu_t *cpu) {
+void push(const emu_t *emu) {
+  cpu_t *cpu = emu->cpu;
+  mmu_t *mmu = emu->mmu;
   uint16_t *sp = &cpu->registers.sp;
-  uint16_t *reg = get_r16stk(cpu);
+  const uint16_t *reg = get_r16stk(cpu);
 
-  cpu->memory.raw[--(*sp)] = (*reg >> 8) & 0xFF;
-  cpu->memory.raw[--(*sp)] = (*reg) & 0xFF;
+  mmu->raw[--(*sp)] = (*reg >> 8) & 0xFF;
+  mmu->raw[--(*sp)] = (*reg) & 0xFF;
 }
 
-void pop(cpu_t *cpu) {
+void pop(const emu_t *emu) {
+  cpu_t *cpu = emu->cpu;
+  const mmu_t *mmu = emu->mmu;
   uint16_t *sp = &cpu->registers.sp;
   uint16_t *reg = get_r16stk(cpu);
 
-  *reg = cpu->memory.raw[(*sp)++];
-  *reg |= cpu->memory.raw[(*sp)++] << 8;
+  *reg = mmu->raw[(*sp)++];
+  *reg |= mmu->raw[(*sp)++] << 8;
 
   if(reg == &cpu->registers.af)
     *reg &= 0xfff0; // f's lsb must be blank

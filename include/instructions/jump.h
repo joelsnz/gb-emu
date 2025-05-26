@@ -1,12 +1,12 @@
 #ifndef JUMP_H
 #define JUMP_H
 
-#include "cpu.h"
+#include "emulator.h"
 
-void jp(cpu_t *cpu);
-void jpc(cpu_t *cpu);
-void jphl(cpu_t *cpu);
-void jr(cpu_t *cpu);
-void jrc(cpu_t *cpu);
+void jp(emu_t *emu);
+void jpc(emu_t *emu);
+void jphl(emu_t *emu);
+void jr(emu_t *emu);
+void jrc(emu_t *emu);
 
 #endif // JUMP_H

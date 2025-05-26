@@ -1,10 +1,12 @@
 #ifndef INSTRUCTIONS_H
 #define INSTRUCTIONS_H
 
-#include "cpu.h"
+#include "emulator.h"
+
+#include <stdint.h>
 
 typedef struct {
-  void (*instruction)(cpu_t*);
+  void (*instruction)(emu_t *);
   uint8_t bytes;
   uint8_t cycles;
 } instruction_t;
