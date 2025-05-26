@@ -1,0 +1,25 @@
+BasedOnStyle: LLVM
+
+IndentWidth: 2
+TabWidth: 2
+UseTab: Never
+
+# if-else statements
+AllowShortIfStatementsOnASingleLine: AllIfsAndElse # allow if-else to be on a single line
+AllowShortBlocksOnASingleLine: Always
+
+# include
+SortIncludes: true
+IncludeBlocks: Regroup # group in blocks
+
+# spaces
+SpaceBeforeParens: Never
+
+AlignConsecutiveDeclarations: false
+# AlignConsecutiveAssignments: true # align struct assignements
+AlignConsecutiveMacros: false
+
+# comments
+AlignTrailingComments: true
+
+ColumnLimit: 70
