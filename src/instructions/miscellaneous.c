@@ -1,10 +1,12 @@
 #include "instructions/miscellaneous.h"
 
 #include "flags.h"
+#include "cpu.h"
 
-void swap(cpu_t *cpu) {
-  uint8_t *reg = get_lower_r8(cpu);
-  uint8_t result = (*reg << 4) | (*reg >> 4);
+void swap(const emu_t *emu) {
+  cpu_t *cpu = emu->cpu;
+  uint8_t *reg = get_lower_r8(emu);
+  const uint8_t result = (*reg << 4) | (*reg >> 4);
 
   if(result) CLEAR_FLAG(cpu, ZERO_FLAG);
   else SET_FLAG(cpu, ZERO_FLAG);
@@ -14,7 +16,8 @@ void swap(cpu_t *cpu) {
   *reg = result;
 }
 
-void daa(cpu_t *cpu) {
+void daa(const emu_t *emu) {
+  cpu_t *cpu = emu->cpu;
   uint16_t result = cpu->registers.a;
 
   if((result & 0x0F) > 0x09) result += 0x06;
@@ -31,30 +34,34 @@ void daa(cpu_t *cpu) {
   cpu->registers.a = result;
 }
 
-void cpl(cpu_t *cpu) {
+void cpl(const emu_t *emu) {
+  cpu_t *cpu = emu->cpu;
   SET_FLAG(cpu, NEGATIVE_FLAG | HALFCARRY_FLAG);
 
   cpu->registers.a = ~cpu->registers.a;
 }
 
-void ccf(cpu_t *cpu) {
+void ccf(const emu_t *emu) {
+  cpu_t *cpu = emu->cpu;
   CLEAR_FLAG(cpu, NEGATIVE_FLAG | HALFCARRY_FLAG);
 
   if(ISSET_FLAG(cpu, CARRY_FLAG)) CLEAR_FLAG(cpu, CARRY_FLAG);
   else SET_FLAG(cpu, CARRY_FLAG);
 }
 
-void scf(cpu_t *cpu) {
+void scf(const emu_t *emu) {
+  cpu_t *cpu = emu->cpu;
   CLEAR_FLAG(cpu, NEGATIVE_FLAG | HALFCARRY_FLAG);
 
   SET_FLAG(cpu, CARRY_FLAG);
 }
 
-void nop(cpu_t *cpu) { ; }
+void nop(const emu_t *emu) { ; }
 
-void halt(cpu_t *cpu) { ; } // tbi
-void stop(cpu_t *cpu) { ; } // tbi
+void halt(const emu_t *emu) { ; } // tbi
 
-void di(cpu_t *cpu) { cpu->ime = 0; }
+void stop(const emu_t *emu) { ; } // tbi
 
-void ei(cpu_t *cpu) { cpu->ime = 1; }
+void di(const emu_t *emu) { emu->cpu->ime = 0; }
+
+void ei(const emu_t *emu) { emu->cpu->ime = 1; }

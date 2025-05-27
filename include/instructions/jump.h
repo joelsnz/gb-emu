@@ -3,10 +3,10 @@
 
 #include "emulator.h"
 
-void jp(emu_t *emu);
-void jpc(emu_t *emu);
-void jphl(emu_t *emu);
-void jr(emu_t *emu);
-void jrc(emu_t *emu);
+void jp(const emu_t *emu);
+void jpc(const emu_t *emu);
+void jphl(const emu_t *emu);
+void jr(const emu_t *emu);
+void jrc(const emu_t *emu);
 
 #endif // JUMP_H

@@ -1,8 +1,12 @@
 #include "instructions/shifts.h"
 
+#include "cpu.h"
 #include "flags.h"
 
-void rlca(cpu_t *cpu) {
+#include <stdint.h>
+
+void rlca(const emu_t *emu) {
+  cpu_t *cpu = emu->cpu;
   uint8_t result = cpu->registers.a << 1;
 
   CLEAR_FLAG(cpu, ZERO_FLAG | NEGATIVE_FLAG | HALFCARRY_FLAG);
@@ -17,7 +21,8 @@ void rlca(cpu_t *cpu) {
   cpu->registers.a = result;
 }
 
-void rla(cpu_t *cpu) {
+void rla(const emu_t *emu) {
+  cpu_t *cpu = emu->cpu;
   uint8_t result = cpu->registers.a << 1;
 
   result += ISSET_FLAG(cpu, CARRY_FLAG);
@@ -30,7 +35,8 @@ void rla(cpu_t *cpu) {
   cpu->registers.a = result;
 }
 
-void rrca(cpu_t *cpu) {
+void rrca(const emu_t *emu) {
+  cpu_t *cpu = emu->cpu;
   uint8_t result = cpu->registers.a >> 1;
 
   CLEAR_FLAG(cpu, ZERO_FLAG | NEGATIVE_FLAG | HALFCARRY_FLAG);
@@ -45,7 +51,8 @@ void rrca(cpu_t *cpu) {
   cpu->registers.a = result;
 }
 
-void rra(cpu_t *cpu) {
+void rra(const emu_t *emu) {
+  cpu_t *cpu = emu->cpu;
   uint8_t result = cpu->registers.a >> 1;
 
   result += ISSET_FLAG(cpu, CARRY_FLAG) ? 0x80 : 0x00;
@@ -58,8 +65,9 @@ void rra(cpu_t *cpu) {
   cpu->registers.a = result;
 }
 
-void rlc(cpu_t *cpu) {
-  uint8_t *reg = get_lower_r8(cpu);
+void rlc(const emu_t *emu) {
+  cpu_t *cpu = emu->cpu;
+  uint8_t *reg = get_lower_r8(emu);
   uint8_t result = *reg << 1;
 
   CLEAR_FLAG(cpu, NEGATIVE_FLAG | HALFCARRY_FLAG);
@@ -77,8 +85,9 @@ void rlc(cpu_t *cpu) {
   *reg = result;
 }
 
-void rl(cpu_t *cpu) {
-  uint8_t *reg = get_lower_r8(cpu);
+void rl(const emu_t *emu) {
+  cpu_t *cpu = emu->cpu;
+  uint8_t *reg = get_lower_r8(emu);
   uint8_t result = *reg << 1;
 
   result += ISSET_FLAG(cpu, CARRY_FLAG);
@@ -94,8 +103,9 @@ void rl(cpu_t *cpu) {
   *reg = result;
 }
 
-void rrc(cpu_t *cpu) {
-  uint8_t *reg = get_lower_r8(cpu);
+void rrc(const emu_t *emu) {
+  cpu_t *cpu = emu->cpu;
+  uint8_t *reg = get_lower_r8(emu);
   uint8_t result = *reg >> 1;
 
   CLEAR_FLAG(cpu, NEGATIVE_FLAG | HALFCARRY_FLAG);
@@ -113,8 +123,9 @@ void rrc(cpu_t *cpu) {
   *reg = result;
 }
 
-void rr(cpu_t *cpu) {
-  uint8_t *reg = get_lower_r8(cpu);
+void rr(const emu_t *emu) {
+  cpu_t *cpu = emu->cpu;
+  uint8_t *reg = get_lower_r8(emu);
   uint8_t result = *reg >> 1;
 
   result += ISSET_FLAG(cpu, CARRY_FLAG) ? 0x80 : 0x00;
@@ -130,9 +141,10 @@ void rr(cpu_t *cpu) {
   *reg = result;
 }
 
-void sla(cpu_t *cpu) {
-  uint8_t *reg = get_lower_r8(cpu);
-  uint8_t result = *reg << 1;
+void sla(const emu_t *emu) {
+  cpu_t *cpu = emu->cpu;
+  uint8_t *reg = get_lower_r8(emu);
+  const uint8_t result = *reg << 1;
 
   if(result) CLEAR_FLAG(cpu, ZERO_FLAG);
   else SET_FLAG(cpu, ZERO_FLAG);
@@ -145,9 +157,10 @@ void sla(cpu_t *cpu) {
   *reg = result;
 }
 
-void sra(cpu_t *cpu) {
-  uint8_t *reg = get_lower_r8(cpu);
-  uint8_t result = (*reg >> 1) | (*reg & 0x80);
+void sra(const emu_t *emu) {
+  cpu_t *cpu = emu->cpu;
+  uint8_t *reg = get_lower_r8(emu);
+  const uint8_t result = (*reg >> 1) | (*reg & 0x80);
 
   if(result) CLEAR_FLAG(cpu, ZERO_FLAG);
   else SET_FLAG(cpu, ZERO_FLAG);
@@ -160,9 +173,10 @@ void sra(cpu_t *cpu) {
   *reg = result;
 }
 
-void srl(cpu_t *cpu) {
-  uint8_t *reg = get_lower_r8(cpu);
-  uint8_t result = *reg >> 1;
+void srl(const emu_t *emu) {
+  cpu_t *cpu = emu->cpu;
+  uint8_t *reg = get_lower_r8(emu);
+  const uint8_t result = *reg >> 1;
 
   if(result) CLEAR_FLAG(cpu, ZERO_FLAG);
   else SET_FLAG(cpu, ZERO_FLAG);

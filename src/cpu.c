@@ -28,7 +28,7 @@ void cpu_step(const emu_t *emu) {
   if(cpu->opcode == 0xcb) { // prefixed instruction
     instr = prefix_instr_list[++cpu->opcode];
   }
-  instr.instruction(cpu);
+  instr.instruction(emu);
 
   if(actual_pc ==
      cpu->registers.pc) // keep pc if some instr already modified it

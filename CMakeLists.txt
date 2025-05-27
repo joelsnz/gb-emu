@@ -25,6 +25,8 @@ set(SOURCES
   src/rom.c
   src/lcd.c
   src/ppu.c
+        src/common.c
+        include/common.h
 )
 
 add_executable(${PROJECT_NAME} ${SOURCES})

@@ -1,20 +1,24 @@
 #include "rom.h"
-#include "memory.h"
+#include "mmu.h"
+#include "cpu.h"
 
 #include <stdio.h>
 
-void boot_sequence(cpu_t *cpu) {
-	cpu->registers.af = 0x01B0;
-	cpu->registers.bc = 0x0013;
-	cpu->registers.de = 0x00D8;
-	cpu->registers.hl = 0x014D;
-	cpu->registers.sp = 0xFFFE;
-	cpu->registers.pc = 0x0;
+void boot_sequence(const emu_t *emu) {
+  registers_t *reg = &emu->cpu->registers;
+  mmu_t *mmu = emu->mmu;
+	reg->af = 0x01B0;
+	reg->bc = 0x0013;
+	reg->de = 0x00D8;
+	reg->hl = 0x014D;
+	reg->sp = 0xFFFE;
+	reg->pc = 0x0;
 
-	cpu->memory.raw[0xFF50] = 0;
+	mmu->raw[0xFF50] = 0;
 }
 
-int load_rom(cpu_t *cpu, const char *rom_path) {
+int load_rom(const emu_t *emu, const char *rom_path) {
+  mmu_t *mmu = emu->mmu;
 	FILE *rom = fopen(rom_path, "rb");
 
 	if(!rom) {
@@ -23,10 +27,10 @@ int load_rom(cpu_t *cpu, const char *rom_path) {
 	}
 
 	fseek(rom, 0, SEEK_END);
-	size_t size = ftell(rom);
+	const size_t size = ftell(rom);
 	rewind(rom);
 
-	fread(cpu->memory.rom, 1, size, rom);
+	fread(mmu->rom, 1, size, rom);
 
 	fclose(rom);
 

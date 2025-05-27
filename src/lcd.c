@@ -1,5 +1,7 @@
 #include "lcd.h"
 
+#include "mmu.h"
+
 #include <SDL3/SDL.h>
 
 static SDL_Window *window = NULL;
@@ -7,7 +9,9 @@ static SDL_Renderer *renderer = NULL;
 static SDL_Texture *texture = NULL;
 static SDL_Event event;
 
-uint8_t lcd_init(lcd_t* lcd, cpu_t* cpu) {
+uint8_t lcd_init(const emu_t *emu) {
+  mmu_t *mmu = emu->mmu;
+  lcd_t *lcd = emu->lcd;
   if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS) < 0) return 0;
 
   window = SDL_CreateWindow("xgb", LCD_WIDTH * WINDOW_SCALE,
@@ -31,10 +35,9 @@ uint8_t lcd_init(lcd_t* lcd, cpu_t* cpu) {
     return -4;
   }
 
-  *lcd = (lcd_t){.ly = cpu->memory.raw[0xff44],
-    .lyc = cpu->memory.raw[0xff45],
-    .stat = cpu->memory.raw[0xff41]
-  };
+  *lcd = (lcd_t){.ly = mmu->raw[0xff44],
+                 .lyc = mmu->raw[0xff45],
+                 .stat = mmu->raw[0xff41]};
 
   return 0;
 }

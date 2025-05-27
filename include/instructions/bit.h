@@ -3,8 +3,8 @@
 
 #include "emulator.h"
 
-void bit(emu_t *emu);
-void set(emu_t *emu);
-void res(emu_t *emu);
+void bit(const emu_t *emu);
+void set(const emu_t *emu);
+void res(const emu_t *emu);
 
 #endif //BIT_H

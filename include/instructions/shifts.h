@@ -3,16 +3,16 @@
 
 #include "emulator.h"
 
-void rlca(emu_t *emu);
-void rla(emu_t *emu);
-void rrca(emu_t *emu);
-void rra(emu_t *emu);
-void rlc(emu_t *emu);
-void rl(emu_t *emu);
-void rrc(emu_t *emu);
-void rr(emu_t *emu);
-void sla(emu_t *emu);
-void sra(emu_t *emu);
-void srl(emu_t *emu);
+void rlca(const emu_t *emu);
+void rla(const emu_t *emu);
+void rrca(const emu_t *emu);
+void rra(const emu_t *emu);
+void rlc(const emu_t *emu);
+void rl(const emu_t *emu);
+void rrc(const emu_t *emu);
+void rr(const emu_t *emu);
+void sla(const emu_t *emu);
+void sra(const emu_t *emu);
+void srl(const emu_t *emu);
 
 #endif //SHIFTS_H

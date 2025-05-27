@@ -6,7 +6,7 @@
 #include <stdint.h>
 
 typedef struct {
-  void (*instruction)(emu_t *);
+  void (*instruction)(const emu_t *);
   uint8_t bytes;
   uint8_t cycles;
 } instruction_t;

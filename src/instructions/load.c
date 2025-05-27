@@ -3,6 +3,7 @@
 #include "flags.h"
 #include "cpu.h"
 #include "mmu.h"
+#include "common.h"
 
 void ld(const emu_t *emu) {
   uint8_t *dest = get_middle_r8(emu);
@@ -124,23 +125,17 @@ void ldhlsp(const emu_t *emu) {
 }
 
 void push(const emu_t *emu) {
-  cpu_t *cpu = emu->cpu;
-  mmu_t *mmu = emu->mmu;
-  uint16_t *sp = &cpu->registers.sp;
-  const uint16_t *reg = get_r16stk(cpu);
+  const uint16_t *reg = get_r16stk(emu->cpu);
 
-  mmu->raw[--(*sp)] = (*reg >> 8) & 0xFF;
-  mmu->raw[--(*sp)] = (*reg) & 0xFF;
+  push_to_stack(emu, *reg);
 }
 
 void pop(const emu_t *emu) {
-  cpu_t *cpu = emu->cpu;
-  const mmu_t *mmu = emu->mmu;
-  uint16_t *sp = &cpu->registers.sp;
+  const cpu_t *cpu = emu->cpu;
+
   uint16_t *reg = get_r16stk(cpu);
 
-  *reg = mmu->raw[(*sp)++];
-  *reg |= mmu->raw[(*sp)++] << 8;
+  *reg = pop_from_stack(emu);
 
   if(reg == &cpu->registers.af)
     *reg &= 0xfff0; // f's lsb must be blank
