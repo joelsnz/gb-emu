@@ -1,13 +1,13 @@
-#include "instructions/instructions.h"
+#include "instructions.h"
 
-#include "instructions/arithmetic.h"
-#include "instructions/bit.h"
-#include "instructions/call.h"
-#include "instructions/jump.h"
-#include "instructions/load.h"
-#include "instructions/miscellaneous.h"
-#include "instructions/shifts.h"
+#include "arithmetic.h"
+#include "bit.h"
+#include "call.h"
 #include "cpu.h"
+#include "jump.h"
+#include "load.h"
+#include "miscellaneous.h"
+#include "shifts.h"
 
 instruction_t base_instr_list[0xFF + 1];
 instruction_t prefix_instr_list[0xFF + 1];

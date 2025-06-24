@@ -7,17 +7,6 @@
 #define LCD_HEIGHT 144
 #define WINDOW_SCALE 4
 
-#include "emulator.h"
-
-typedef struct lcd_t {
-  uint8_t ly;
-  uint8_t lyc;
-  uint8_t stat;
-} lcd_t;
-
-uint8_t lcd_init(const emu_t *emu);
-uint8_t lcd_step(void);
-void lcd_render(void);
-void lcd_quit(void);
+void lcd_test();
 
 #endif // LCD_H
