@@ -1,19 +1,19 @@
 #ifndef CPU_H
 #define CPU_H
 
-#include <stdint.h>
-
-#include "registers.h"
 #include "emulator.h"
+#include "registers.h"
+
+#include <stdint.h>
 
 typedef struct cpu_t {
   registers_t registers;
-	uint8_t *r8[8];
-	uint16_t *r16[4];
-	uint16_t *r16mem[4];
-	uint16_t *r16stk[4];
+  uint8_t *r8[8];
+  uint16_t *r16[4];
+  uint16_t *r16mem[4];
+  uint16_t *r16stk[4];
   uint8_t ime;
-	uint8_t opcode;
+  uint8_t opcode;
   uint64_t cycles;
 } cpu_t;
 
@@ -33,4 +33,4 @@ uint8_t get_tgt3(const cpu_t *cpu);
 uint8_t get_b3(const cpu_t *cpu);
 uint8_t get_cond(const cpu_t *cpu);
 
-#endif //CPU_H
+#endif // CPU_H
