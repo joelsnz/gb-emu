@@ -1,6 +1,9 @@
 #include "lcd.h"
 
-#include "SDL3/SDL.h"
+#include "SDL3/SDL_init.h"
+#include "SDL3/SDL_rect.h"
+#include "SDL3/SDL_surface.h"
+#include "SDL3/SDL_video.h"
 
 #define LCD_WIDTH 160
 #define LCD_HEIGHT 144
@@ -56,40 +59,4 @@ void lcd_draw_window(uint8_t x, uint8_t y, uint32_t color) {
   SDL_Rect wdw =
       lcd_scale((SDL_Rect){x, y, LCD_WIDTH - x, LCD_HEIGHT - y});
   SDL_FillSurfaceRect(surface, &wdw, color);
-}
-
-void lcd_test() {
-  lcd_init();
-
-  int game = 1;
-  while(game) {
-    SDL_Event event;
-    while(SDL_PollEvent(&event)) {
-      switch(event.type) {
-      case SDL_EVENT_QUIT:
-        game = 0;
-        break;
-      default:
-        continue;
-      }
-    }
-    uint8_t gameboy[TILE_SIZE] = {0x3C, 0x7E, 0x42, 0x42, 0x42, 0x42,
-                                  0x42, 0x42, 0x7E, 0x5E, 0x7E, 0x0A,
-                                  0x7C, 0x56, 0x38, 0x7C};
-    uint8_t bg_tile[TILE_SIZE] = {0xFF, 0x00, 0x7E, 0xFF, 0x85, 0x81,
-                                  0x89, 0x83, 0x93, 0x85, 0xA5, 0x8B,
-                                  0xC9, 0x97, 0x7E, 0xFF};
-    uint8_t background[32][32][TILE_SIZE];
-    for(int i = 0; i < 32; i++)
-      for(int j = 0; j < 32; j++)
-        for(int k = 0; k < TILE_SIZE; k++)
-          background[i][j][k] = bg_tile[k];
-
-    lcd_draw_background(background);
-    lcd_draw_window(30, 110, palette[3]);
-    lcd_draw_tile(88, 128, gameboy);
-
-    SDL_UpdateWindowSurface(window);
-    SDL_Delay(20);
-  }
 }
