@@ -1,8 +1,9 @@
 #include "cpu.h"
 
+#include "common.h"
 #include "flags.h"
-#include "mmu.h"
 #include "instructions/instructions.h"
+#include "mmu.h"
 
 void init_cpu(cpu_t *cpu) {
   cpu->cycles = 0;
@@ -24,7 +25,7 @@ void cpu_step(const emu_t *emu) {
   get_opcode(emu);
   uint16_t actual_pc = cpu->registers.pc;
   instruction_t instr = base_instr_list[cpu->opcode];
-  
+
   if(cpu->opcode == 0xcb) { // prefixed instruction
     instr = prefix_instr_list[++cpu->opcode];
   }
@@ -66,8 +67,7 @@ uint8_t get_imm8(const emu_t *emu) {
 uint16_t get_imm16(const emu_t *emu) {
   cpu_t *cpu = emu->cpu;
   mmu_t *mmu = emu->mmu;
-  return (mmu->raw[cpu->registers.pc + 2] << 8) |
-         get_imm8(emu);
+  return (mmu->raw[cpu->registers.pc + 2] << 8) | get_imm8(emu);
 }
 
 uint16_t *get_r16(const cpu_t *cpu) {
@@ -93,9 +93,7 @@ uint8_t get_tgt3(const cpu_t *cpu) {
   return target * 0x08;
 }
 
-uint8_t get_b3(const cpu_t *cpu) {
-  return (cpu->opcode & 0x38) >> 3;
-}
+uint8_t get_b3(const cpu_t *cpu) { return (cpu->opcode & 0x38) >> 3; }
 
 uint8_t get_cond(const cpu_t *cpu) {
   enum conditions_t { nz, z, nc, c };
@@ -105,13 +103,13 @@ uint8_t get_cond(const cpu_t *cpu) {
 
   switch(cond) {
   case nz:
-    return !ISSET_FLAG(cpu, ZERO_FLAG);
+    return !ISSET_BIT(cpu->registers.f, ZERO_FLAG);
   case z:
-    return ISSET_FLAG(cpu, ZERO_FLAG);
+    return ISSET_BIT(cpu->registers.f, ZERO_FLAG);
   case nc:
-    return !ISSET_FLAG(cpu, CARRY_FLAG);
+    return !ISSET_BIT(cpu->registers.f, CARRY_FLAG);
   case c:
-    return ISSET_FLAG(cpu, CARRY_FLAG);
+    return ISSET_BIT(cpu->registers.f, CARRY_FLAG);
   default:
     return 0;
   }

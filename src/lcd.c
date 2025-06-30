@@ -3,9 +3,6 @@
 #include "SDL3/SDL_init.h"
 #include "SDL3/SDL_video.h"
 
-#define LCD_WIDTH 160
-#define LCD_HEIGHT 144
-
 static SDL_Window *window = NULL;
 static SDL_Surface *surface = NULL;
 

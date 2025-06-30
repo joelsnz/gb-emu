@@ -1,15 +1,9 @@
 #include "ppu.h"
 
 #include "SDL3/SDL_rect.h"
+#include "common.h"
 #include "lcd.h"
-
-static union {
-  uint8_t *raw;
-  struct {
-    uint8_t tile_data[384][16];
-    uint8_t tile_map[2][0x0400];
-  };
-} vram;
+#include "mmu.h"
 
 static uint8_t window_scale = 1;
 static uint32_t palette[4] = {0xFF3a5122, 0xFF5d782e, 0xFF919b3a,
@@ -27,7 +21,9 @@ static SDL_Rect scale(SDL_Rect rect) {
 
 void set_scale(uint8_t scale) { window_scale = scale; }
 
-void ppu_init(emu_t *emu) { surface = lcd_init(emu, window_scale); }
+void ppu_init(emu_t *emu) {
+  surface = lcd_init(emu->lcd, window_scale);
+}
 
 void lcd_draw_tile(uint8_t x, uint8_t y, uint8_t tile[TILE_SIZE]) {
   for(int row = 0; row < 8; row++) {
@@ -44,10 +40,29 @@ void lcd_draw_tile(uint8_t x, uint8_t y, uint8_t tile[TILE_SIZE]) {
   }
 }
 
-void lcd_draw_background(uint8_t tilemap[32][32][TILE_SIZE]) {
-  for(int i = 0; i < 32; i++)
-    for(int j = 0; j < 32; j++)
-      lcd_draw_tile(i * 8, j * 8, tilemap[i][j]);
+void lcd_draw_background(emu_t *emu) {
+  lcd_t *lcd = emu->lcd;
+  mmu_t *mmu = emu->mmu;
+
+  if(ISSET_BIT(lcd->lcdc, BG_WDW_ENABLE)) {
+    // uint8_t scy = lcd->scy;
+    // uint8_t scx = lcd->scx;
+    uint8_t selected_tm = ISSET_BIT(lcd->lcdc, BG_TILE_MAP);
+    // uint8_t y = ( + scy) % 256;
+    // uint8_t x = (col + scx) % 256;
+
+    for(int row = 0; row < LCD_HEIGHT; row++) {
+      for(int col = 0; col < LCD_WIDTH; col++) {
+        uint8_t tile_index =
+            mmu->vram.tile_map[selected_tm][row % 32][col % 32];
+        uint8_t lsb = mmu->vram.tile_data[tile_index][row * 2];
+        uint8_t msb = mmu->vram.tile_data[tile_index][(row * 2) + 1];
+      }
+    }
+  } else {
+    SDL_Rect blank_bg = {0, 0, LCD_WIDTH, LCD_HEIGHT};
+    SDL_FillSurfaceRect(surface, &blank_bg, palette[0]);
+  }
 }
 
 void lcd_draw_window(uint8_t x, uint8_t y, uint32_t color) {

@@ -1,11 +1,9 @@
-#include "cpu.h"
-#include "lcd.h"
-#include "rom.h"
+#include "ppu.h"
 
 #include <stdlib.h>
 
 int main(int argc, char **argv) {
-  if(argc == 2) lcd_set_scale(atoi(argv[1]));
+  if(argc == 2) set_scale(atoi(argv[1]));
 
   return 0;
 }

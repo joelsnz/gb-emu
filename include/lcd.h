@@ -7,6 +7,19 @@
 #include <stdint.h>
 
 #define TILE_SIZE 16
+#define LCD_WIDTH 160
+#define LCD_HEIGHT 144
+
+enum lcdc_t {
+  BG_WDW_ENABLE,
+  OBJ_ENABLE,
+  OBJ_SIZE,
+  BG_TILE_MAP,
+  BG_WDW_TILES,
+  WDW_ENABLE,
+  WDW_TILE_MAP,
+  LCD_PPU_ENABLE
+};
 
 typedef struct lcd_t {
   uint8_t lcdc;
