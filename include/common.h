@@ -5,7 +5,7 @@
 
 #include <stdint.h>
 
-#define ISSET_BIT(x, bit) ((x & bit) != 0)
+#define ISSET_BIT(x, bit) ((x && bit) != 0)
 #define SET_BIT(x, bit) (x |= bit)
 #define CLEAR_BIT(x, bit) (x &= ~bit)
 
