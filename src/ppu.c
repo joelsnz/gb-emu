@@ -45,26 +45,9 @@ void lcd_draw_background(emu_t *emu) {
   mmu_t *mmu = emu->mmu;
   vram_t *vram = &mmu->vram;
   uint8_t *lcdc = &lcd->lcdc;
+  SDL_Rect bg = {0, 0, LCD_WIDTH, LCD_HEIGHT}; // starts with blank bg
 
-  if(ISSET_BIT(lcdc, BG_WDW_ENABLE)) {
-    // uint8_t scy = lcd->scy;
-    // uint8_t scx = lcd->scx;
-    uint8_t selected_tm = ISSET_BIT(lcdc, BG_TILE_MAP);
-    // uint8_t y = ( + scy) % 256;
-    // uint8_t x = (col + scx) % 256;
-
-    for(int row = 0; row < LCD_HEIGHT; row++) {
-      for(int col = 0; col < LCD_WIDTH; col++) {
-        uint8_t tile_index =
-            vram->tile_map[selected_tm][row % 32][col % 32];
-        uint8_t lsb = vram->tile_data[tile_index][row * 2];
-        uint8_t msb = vram->tile_data[tile_index][(row * 2) + 1];
-      }
-    }
-  } else {
-    SDL_Rect blank_bg = {0, 0, LCD_WIDTH, LCD_HEIGHT};
-    SDL_FillSurfaceRect(surface, &blank_bg, palette[0]);
-  }
+  SDL_FillSurfaceRect(surface, &bg, palette[0]);
 }
 
 void lcd_draw_window(uint8_t x, uint8_t y, uint32_t color) {
