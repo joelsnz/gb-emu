@@ -16,3 +16,5 @@ CMakeLists.txt.user
 *.bak
 
 /.idea/
+
+compile_commands.json
