@@ -5,6 +5,7 @@
 
 #include <stdint.h>
 
-void ppu_init(emu_t *emu);
+uint16_t* u_read_tile(uint8_t index);
+uint16_t* read_tile(uint8_t index);
 
 #endif // PPU_H

@@ -10,7 +10,7 @@
 typedef union vram_t {
   uint8_t *raw;
   struct {
-    uint8_t tile_data[384][16];
+    uint16_t tile_data[384];
     uint8_t tile_map[2][32][32];
   };
 } vram_t;
